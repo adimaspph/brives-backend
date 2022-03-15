@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("mapel")
 public class MapelRestController {
@@ -27,6 +28,12 @@ public class MapelRestController {
     @GetMapping("/")
     public List<MapelModel> getAllMapel() {
         return mapelDb.findAll();
+    }
+
+    // Add mapel
+    @PostMapping("/")
+    public MapelModel createMapel (@RequestBody MapelModel mapel) {
+        return mapelDb.save(mapel);
     }
 
 
