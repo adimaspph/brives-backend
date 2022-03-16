@@ -34,7 +34,7 @@ public class MapelModel implements Serializable {
     private String namaMapel;
 
     @NotNull
-    @Size(max = 50)
+//    @Size(max = 1000)
     @Column(name = "deskripsi", nullable = false)
     private String deskripsi;
 
