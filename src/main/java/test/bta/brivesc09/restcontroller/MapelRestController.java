@@ -1,5 +1,8 @@
 package test.bta.brivesc09.restcontroller;
 
+import nonapi.io.github.classgraph.json.JSONUtils;
+import org.apache.velocity.exception.ResourceNotFoundException;
+import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.StaffDTO;
 import test.bta.brivesc09.model.MapelModel;
@@ -34,6 +37,27 @@ public class MapelRestController {
     @PostMapping("/")
     public MapelModel createMapel (@RequestBody MapelModel mapel) {
         return mapelDb.save(mapel);
+    }
+
+    // Get Mapel by Id
+    @GetMapping("/{id}")
+    public ResponseEntity <MapelModel> getMapelById(@PathVariable Long id) {
+        MapelModel mapel = mapelDb.findByIdMapel(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Mapel tidak ditemukan"));
+        return ResponseEntity.ok(mapel);
+    }
+
+    // Update mapel
+    @PutMapping("/{id}")
+    public ResponseEntity<MapelModel> updateMapel(@PathVariable Long id, @RequestBody MapelModel mapelDetails) {
+        MapelModel mapel = mapelDb.findByIdMapel(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Mapel tidak ditemukan"));
+        mapel.setNamaMapel(mapelDetails.getNamaMapel());
+        mapel.setDeskripsi(mapelDetails.getDeskripsi());
+        mapel.setListJenjang(mapelDetails.getListJenjang());
+
+        MapelModel updatedMapel = mapelDb.save(mapel);
+        return ResponseEntity.ok(updatedMapel);
     }
 
 
