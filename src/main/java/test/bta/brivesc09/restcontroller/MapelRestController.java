@@ -1,5 +1,6 @@
 package test.bta.brivesc09.restcontroller;
 
+import nonapi.io.github.classgraph.json.JSONUtils;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import test.bta.brivesc09.rest.BaseResponse;
@@ -53,7 +54,7 @@ public class MapelRestController {
                 .orElseThrow(() -> new ResourceNotFoundException("Mapel tidak ditemukan"));
         mapel.setNamaMapel(mapelDetails.getNamaMapel());
         mapel.setDeskripsi(mapelDetails.getDeskripsi());
-        mapel.setJenjang(mapelDetails.getJenjang());
+        mapel.setListJenjang(mapelDetails.getListJenjang());
 
         MapelModel updatedMapel = mapelDb.save(mapel);
         return ResponseEntity.ok(updatedMapel);

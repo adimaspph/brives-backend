@@ -34,14 +34,20 @@ public class MapelModel implements Serializable {
     private String namaMapel;
 
     @NotNull
-//    @Size(max = 1000)
     @Column(name = "deskripsi", nullable = false)
     private String deskripsi;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "idJenjang", referencedColumnName = "idJenjang")
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private JenjangModel jenjang;
+//    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+//    @JoinColumn(name = "idJenjang", referencedColumnName = "idJenjang")
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+//    private JenjangModel jenjang;
+
+    @ManyToMany
+    @JoinTable(
+            name = "mapel_jenjang",
+            joinColumns = @JoinColumn(name = "idMapel"),
+            inverseJoinColumns = @JoinColumn(name = "idJenjang"))
+    List<JenjangModel> listJenjang;
 
 }

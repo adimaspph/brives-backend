@@ -32,7 +32,10 @@ public class JenjangModel implements Serializable {
     @Column(name = "nama_jenjang", nullable = false)
     private String namaJenjang;
 
-    @OneToMany(mappedBy = "jenjang", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<MapelModel> listMapel;
+//    @OneToMany(mappedBy = "jenjang", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    private List<MapelModel> listMapel;
+
+    @ManyToMany(mappedBy = "listJenjang")
+    List<MapelModel> listMapel;
 
 }
