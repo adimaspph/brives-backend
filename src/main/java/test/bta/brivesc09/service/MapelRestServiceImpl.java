@@ -1,5 +1,6 @@
 package test.bta.brivesc09.service;
 
+import test.bta.brivesc09.model.JadwalModel;
 import test.bta.brivesc09.model.MapelModel;
 import test.bta.brivesc09.repository.MapelDb;
 
@@ -21,6 +22,15 @@ public class MapelRestServiceImpl implements MapelRestService {
         return mapelDb.save(mapel);
     }
 
+    @Override
+    public MapelModel getMapelById(Long id) {
+        Optional<MapelModel> mapel = mapelDb.findByIdMapel(id);
+        if (mapel.isPresent()) {
+            return mapel.get();
+        }
+        return null;
+
+    }
 
 
 }
