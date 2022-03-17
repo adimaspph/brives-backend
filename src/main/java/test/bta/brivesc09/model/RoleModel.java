@@ -32,6 +32,6 @@ public class RoleModel implements Serializable {
     private String namaRole;
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<StaffModel> listStaff;
+    private List<UserModel> listUser;
 
 }
