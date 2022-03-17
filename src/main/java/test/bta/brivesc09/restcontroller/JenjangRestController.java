@@ -26,14 +26,14 @@ public class JenjangRestController {
     private JenjangDb jenjangDb;
 
     @GetMapping("/")
-    public List<JenjangModel> getAllMapel() {
+    public List<JenjangModel> getAllJenjang() {
         return jenjangDb.findAll();
     }
 
     // Add mapel
     @PostMapping("/")
-    public JenjangModel createMapel (@RequestBody JenjangModel mapel) {
-        return jenjangDb.save(mapel);
+    public JenjangModel createJenjang (@RequestBody JenjangModel jenjang) {
+        return jenjangDb.save(jenjang);
     }
 
 
