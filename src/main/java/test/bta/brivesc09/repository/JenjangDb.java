@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface JenjangDb extends JpaRepository<JenjangModel, Long>{
-    Optional<JenjangModel> findByIdJenjang(Long idJenjang);
+    JenjangModel findByIdJenjang(Long idJenjang);
     List<JenjangModel> findAll();
 
 }

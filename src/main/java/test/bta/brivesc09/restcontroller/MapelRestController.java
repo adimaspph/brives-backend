@@ -30,19 +30,14 @@ public class MapelRestController {
     private MapelDb mapelDb;
 
     @GetMapping("/")
-    public List<MapelModel> getAllMapel() {
-        return mapelDb.findAll();
-    }
+    public BaseResponse<List<MapelModel>> getAllMapel() {
+        BaseResponse<List<MapelModel>> response = new BaseResponse<>();
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(mapelDb.findAll());
 
-//    @GetMapping("/")
-//    public BaseResponse<List<MapelModel>> getAllMapel() {
-//        BaseResponse<List<MapelModel>> response = new BaseResponse<>();
-//        response.setStatus(200);
-//        response.setMessage("success");
-//        response.setResult(mapelDb.findAll());
-//
-//        return response;
-//    }
+        return response;
+    }
 
 
     @RequestMapping("/")
@@ -83,23 +78,11 @@ public class MapelRestController {
             response.setResult(mapelDb.findByIdMapel(id));
         } catch (Exception e) {
             response.setStatus(400);
-            response.setMessage("Mata Pelajaran Tidak Ditemukan");
+            response.setMessage(e.toString());
             response.setResult(null);
         }
         return response;
     }
-
-    // Update mapel
-//    @PutMapping("/{id}")
-//    public ResponseEntity<MapelModel> updateMapel(@PathVariable Long id, @RequestBody MapelModel mapelDetails) {
-//        MapelModel mapel = mapelDb.findByIdMapel(id);
-//        mapel.setNamaMapel(mapelDetails.getNamaMapel());
-//        mapel.setDeskripsi(mapelDetails.getDeskripsi());
-//        mapel.setListJenjang(mapelDetails.getListJenjang());
-//
-//        MapelModel updatedMapel = mapelDb.save(mapel);
-//        return ResponseEntity.ok(updatedMapel);
-//    }
 
 
     @PutMapping("/{id}")
