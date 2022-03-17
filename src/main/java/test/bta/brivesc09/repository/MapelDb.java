@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface MapelDb extends JpaRepository<MapelModel, Long>{
     MapelModel findByIdMapel(Long idMapel);
     List<MapelModel> findAll();
-//    List<MapelModel> findAllByJenjang(String jenjang);
+    List<MapelModel> findAllByNamaMapel(String namaMapel);
 
 }

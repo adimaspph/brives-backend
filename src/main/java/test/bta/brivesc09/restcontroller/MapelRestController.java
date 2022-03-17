@@ -39,6 +39,22 @@ public class MapelRestController {
         return response;
     }
 
+    @GetMapping("/nama/{namaMapel}")
+    public BaseResponse<List<MapelModel>> getAllMapelByNamaMapel(@PathVariable String namaMapel) {
+        BaseResponse<List<MapelModel>> response = new BaseResponse<>();
+        response.setResult(mapelDb.findAllByNamaMapel(namaMapel));
+        if (response.getResult().size() > 0){
+            response.setStatus(400);
+            response.setMessage("Mata Kuliah Sudah Ada");
+            response.setResult(null);
+        } else {
+            response.setStatus(200);
+            response.setMessage("success");
+        }
+
+        return response;
+    }
+
 
     @RequestMapping("/")
     public BaseResponse<MapelModel> createMapel(@Valid @RequestBody MapelModel mapel, BindingResult bindingResult) throws ParseException {
