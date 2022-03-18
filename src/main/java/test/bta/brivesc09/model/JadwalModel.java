@@ -2,6 +2,7 @@ package test.bta.brivesc09.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.List;
 @Setter @Getter
 @Entity
 @Table(name = "jadwal")
+@JsonIgnoreProperties(value={"staff", "mapel", "siswa", "log", "listPesanan"},allowSetters = true)
 public class JadwalModel implements Serializable {
 
     @Id
@@ -47,14 +49,14 @@ public class JadwalModel implements Serializable {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate tanggal;
 
-    @OneToOne(mappedBy = "siswa")
-    private UserModel user;
+//    @OneToOne(mappedBy = "siswa")
+//    private UserModel user;
 
     @Column(nullable = true)
     private String linkZoom;
 
     //Jenis Kelas
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     private JenisKelas jenisKelas;
 
     // Staff
