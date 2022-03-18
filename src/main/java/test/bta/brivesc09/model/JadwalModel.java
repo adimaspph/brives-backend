@@ -1,5 +1,7 @@
 package test.bta.brivesc09.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,16 +31,19 @@ public class JadwalModel implements Serializable {
 
     @NotNull
     @Column(nullable = false)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm")
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime waktuMulai;
 
     @NotNull
     @Column(nullable = false)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "HH:mm")
     @DateTimeFormat(pattern = "HH:mm")
     private LocalTime waktuSelesai;
 
     @NotNull
     @Column(nullable = false)
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate tanggal;
 
@@ -49,8 +54,8 @@ public class JadwalModel implements Serializable {
     private String linkZoom;
 
     //Jenis Kelas
-//    @Enumerated(EnumType.ORDINAL)
-//    private Status status;
+    @Enumerated(EnumType.ORDINAL)
+    private JenisKelas jenisKelas;
 
     // Staff
     @ManyToOne
@@ -64,7 +69,7 @@ public class JadwalModel implements Serializable {
 
     // Siswa
     @ManyToOne
-    @JoinColumn(name="id_siswa", nullable=false)
+    @JoinColumn(name="id_siswa", nullable=true)
     private SiswaModel siswa;
 
     // Log
@@ -76,3 +81,4 @@ public class JadwalModel implements Serializable {
     @OneToMany(mappedBy="jadwal")
     private List<PesananModel> listPesanan;
 }
+
