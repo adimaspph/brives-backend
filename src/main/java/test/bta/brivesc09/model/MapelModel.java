@@ -38,11 +38,6 @@ public class MapelModel implements Serializable {
     private String deskripsi;
 
 
-//    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-//    @JoinColumn(name = "idJenjang", referencedColumnName = "idJenjang")
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    private JenjangModel jenjang;
-
     @ManyToMany
     @JoinTable(
             name = "mapel_jenjang",
@@ -50,4 +45,14 @@ public class MapelModel implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "idJenjang"))
     List<JenjangModel> listJenjang;
 
+    //Relasi ke staff
+    @ManyToMany
+    @JoinTable(
+            name = "staff_mapel",
+            joinColumns = @JoinColumn(name = "idMapel"),
+            inverseJoinColumns = @JoinColumn(name = "idStaff"))
+    List<StaffModel> listStaff;
+
+    @OneToMany(mappedBy="mapel")
+    private List<JadwalModel> listJadwal;
 }

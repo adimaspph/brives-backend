@@ -17,33 +17,29 @@ import java.util.List;
 @NoArgsConstructor
 @Setter @Getter
 @Entity
-@Table(name = "Staff")
-public class StaffModel implements Serializable {
+@Table(name = "log")
+public class LogModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idStaff;
+    private Long idLog;
 
     @NotNull
-    @Size(max = 50)
-    @Column(name="no_pegawai")
-    private String noPegawai;
+    @Column(nullable = false)
+    private String catatan;
 
     @NotNull
-    @Column(name="tarif")
-    private Integer tarif;
-
-    @ManyToMany(mappedBy = "listStaff")
-    List<MapelModel> listMapel;
-
-    @OneToOne(mappedBy = "staff")
-    private UserModel user;
+    @Column(nullable = false)
+    private Boolean statusKehadiran;
 
     //Jadwal
-    @OneToMany(mappedBy="staff")
-    private List<JadwalModel> listJadwal;
+    @OneToOne(mappedBy="log")
+    private JadwalModel jadwal;
 
-    //Log
-    @OneToMany(mappedBy="staff")
-    private List<LogModel> log;
+    //Staff
+    @ManyToOne
+    @JoinColumn(name="id_staff", nullable=false)
+    private StaffModel staff;
+
+    //Bukti Image
 }
