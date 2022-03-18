@@ -4,6 +4,7 @@ import test.bta.brivesc09.model.UserModel;
 import test.bta.brivesc09.repository.UserDb;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -40,4 +41,11 @@ public class UserRestServiceImpl implements UserRestService {
        UserModel User = getUserByUsername(username);
        userDb.delete(User);
    }
+
+   @Override
+    public String encrypt(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hash = encoder.encode(password);
+        return hash;
+    }
 }
