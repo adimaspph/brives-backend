@@ -1,5 +1,7 @@
 package test.bta.brivesc09.rest;
 
+import java.util.List;
+
 import test.bta.brivesc09.model.RoleModel;
 import test.bta.brivesc09.model.SiswaModel;
 import test.bta.brivesc09.model.StaffModel;
@@ -15,6 +17,7 @@ public class StaffDTO {
 
     public String noPegawai;
     public Integer tarif;
+    public List<String> listMapel;
 
     public String getUsername() {
         return this.username;
@@ -46,5 +49,9 @@ public class StaffDTO {
 
     public Integer getTarif() {
         return this.tarif;
+    }
+
+    public List<String> getListMapel() {
+        return this.listMapel;
     }
 }
