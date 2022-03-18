@@ -3,6 +3,7 @@ package test.bta.brivesc09.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,13 +20,13 @@ import java.io.Serializable;
 @Setter
 @Getter
 @Entity
+@Builder
 @Table(name="users")
 public class UserModel implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "system-uuid")
-    @GenericGenerator(name = "system-uuid", strategy = "uuid")
-    private String idUser;
+    @NotNull
+    private Long idUser;
 
     @NotNull
     @Size(max = 50)
@@ -58,11 +59,13 @@ public class UserModel implements Serializable {
 
     //Relasi staff
     @OneToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_staff", referencedColumnName = "idStaff")
     private StaffModel staff;
 
     //Relasi siswa
     @OneToOne(cascade = CascadeType.ALL)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_siswa", referencedColumnName = "idSiswa")
     private SiswaModel siswa;
 

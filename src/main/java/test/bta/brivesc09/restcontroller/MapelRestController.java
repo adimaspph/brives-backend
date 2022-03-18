@@ -19,6 +19,7 @@ import java.text.ParseException;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -29,35 +30,102 @@ public class MapelRestController {
     private MapelDb mapelDb;
 
     @GetMapping("/")
-    public List<MapelModel> getAllMapel() {
-        return mapelDb.findAll();
+    public BaseResponse<List<MapelModel>> getAllMapel() {
+        BaseResponse<List<MapelModel>> response = new BaseResponse<>();
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(mapelDb.findAll());
+
+        return response;
     }
 
-    // Add mapel
-    @PostMapping("/")
-    public MapelModel createMapel (@RequestBody MapelModel mapel) {
-        return mapelDb.save(mapel);
+    @GetMapping("/nama/{namaMapel}")
+    public BaseResponse<List<MapelModel>> getAllMapelByNamaMapel(@PathVariable String namaMapel) {
+        BaseResponse<List<MapelModel>> response = new BaseResponse<>();
+        response.setResult(mapelDb.findAllByNamaMapel(namaMapel));
+        if (response.getResult().size() > 0){
+            response.setStatus(400);
+            response.setMessage("Mata Kuliah Sudah Ada");
+            response.setResult(null);
+        } else {
+            response.setStatus(200);
+            response.setMessage("success");
+        }
+
+        return response;
     }
 
-    // Get Mapel by Id
+
+    @RequestMapping("/")
+    public BaseResponse<MapelModel> createMapel(@Valid @RequestBody MapelModel mapel, BindingResult bindingResult) throws ParseException {
+        BaseResponse<MapelModel> response = new BaseResponse<>();
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
+        } else {
+            try {
+                MapelModel newMapel = new MapelModel();
+                newMapel.setIdMapel(mapel.getIdMapel());
+                newMapel.setNamaMapel(mapel.getNamaMapel());
+                newMapel.setListJenjang(mapel.getListJenjang());
+                newMapel.setDeskripsi(mapel.getDeskripsi());
+                newMapel.setListStaff(mapel.getListStaff());
+                newMapel.setListJadwal(mapel.getListJadwal());
+
+                MapelModel savedMapel = mapelDb.save(mapel);
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(savedMapel);
+            } catch (Exception e) {
+                response.setStatus(400);
+                response.setMessage(e.toString());
+                response.setResult(null);
+            }
+            return response;
+        }
+    }
+
+
     @GetMapping("/{id}")
-    public ResponseEntity <MapelModel> getMapelById(@PathVariable Long id) {
-        MapelModel mapel = mapelDb.findByIdMapel(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Mapel tidak ditemukan"));
-        return ResponseEntity.ok(mapel);
+    public BaseResponse<MapelModel> getMapelById(@PathVariable Long id) {
+        BaseResponse<MapelModel> response = new BaseResponse<>();
+        try{
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(mapelDb.findByIdMapel(id));
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
     }
 
-    // Update mapel
-    @PutMapping("/{id}")
-    public ResponseEntity<MapelModel> updateMapel(@PathVariable Long id, @RequestBody MapelModel mapelDetails) {
-        MapelModel mapel = mapelDb.findByIdMapel(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Mapel tidak ditemukan"));
-        mapel.setNamaMapel(mapelDetails.getNamaMapel());
-        mapel.setDeskripsi(mapelDetails.getDeskripsi());
-        mapel.setListJenjang(mapelDetails.getListJenjang());
 
-        MapelModel updatedMapel = mapelDb.save(mapel);
-        return ResponseEntity.ok(updatedMapel);
+    @PutMapping("/{id}")
+    public BaseResponse<MapelModel> updateMapel(@Valid @PathVariable Long id, @RequestBody MapelModel mapel, BindingResult bindingResult) throws ParseException {
+        BaseResponse<MapelModel> response = new BaseResponse<>();
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
+        } else {
+            try {
+                MapelModel newMapel = mapelDb.findByIdMapel(id);
+                newMapel.setNamaMapel(mapel.getNamaMapel());
+                newMapel.setListJenjang(mapel.getListJenjang());
+                newMapel.setDeskripsi(mapel.getDeskripsi());
+                newMapel.setListStaff(mapel.getListStaff());
+                newMapel.setListJadwal(mapel.getListJadwal());
+
+                MapelModel savedMapel = mapelDb.save(newMapel);
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(savedMapel);
+            } catch (Exception e) {
+                response.setStatus(400);
+                response.setMessage(e.toString());
+                response.setResult(null);
+            }
+            return response;
+        }
     }
 
 
