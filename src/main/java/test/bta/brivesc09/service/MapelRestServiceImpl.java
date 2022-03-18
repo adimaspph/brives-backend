@@ -26,6 +26,7 @@ public class MapelRestServiceImpl implements MapelRestService {
     public MapelModel getMapelById(Long id) {
         return mapelDb.findByIdMapel(id);
     }
+    
 
 
 }

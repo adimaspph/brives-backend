@@ -22,7 +22,7 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "mapel")
-@JsonIgnoreProperties(value={"listStaff"},allowSetters = true)
+@JsonIgnoreProperties(value={"listStaff", "listJadwal"},allowSetters = true)
 public class MapelModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
