@@ -22,7 +22,7 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "mapel")
-@JsonIgnoreProperties(value={"listStaff"},allowSetters = true)
+@JsonIgnoreProperties(value={"listStaff", "listJadwal"},allowSetters = true)
 public class MapelModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,4 +55,52 @@ public class MapelModel implements Serializable {
 
     @OneToMany(mappedBy="mapel")
     private List<JadwalModel> listJadwal;
+
+    public Long getIdMapel() {
+        return idMapel;
+    }
+
+    public void setIdMapel(Long idMapel) {
+        this.idMapel = idMapel;
+    }
+
+    public String getNamaMapel() {
+        return namaMapel;
+    }
+
+    public void setNamaMapel(String namaMapel) {
+        this.namaMapel = namaMapel;
+    }
+
+    public String getDeskripsi() {
+        return deskripsi;
+    }
+
+    public void setDeskripsi(String deskripsi) {
+        this.deskripsi = deskripsi;
+    }
+
+    public List<JenjangModel> getListJenjang() {
+        return listJenjang;
+    }
+
+    public void setListJenjang(List<JenjangModel> listJenjang) {
+        this.listJenjang = listJenjang;
+    }
+
+    public List<StaffModel> getListStaff() {
+        return listStaff;
+    }
+
+    public void setListStaff(List<StaffModel> listStaff) {
+        this.listStaff = listStaff;
+    }
+
+    public List<JadwalModel> getListJadwal() {
+        return listJadwal;
+    }
+
+    public void setListJadwal(List<JadwalModel> listJadwal) {
+        this.listJadwal = listJadwal;
+    }
 }

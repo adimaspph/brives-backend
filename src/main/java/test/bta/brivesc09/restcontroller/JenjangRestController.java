@@ -1,5 +1,6 @@
 package test.bta.brivesc09.restcontroller;
 
+import test.bta.brivesc09.model.MapelModel;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.StaffDTO;
 import test.bta.brivesc09.model.JenjangModel;
@@ -26,14 +27,13 @@ public class JenjangRestController {
     private JenjangDb jenjangDb;
 
     @GetMapping("/")
-    public List<JenjangModel> getAllMapel() {
-        return jenjangDb.findAll();
-    }
+    public BaseResponse<List<JenjangModel>> getAllJenjang() {
+        BaseResponse<List<JenjangModel>> response = new BaseResponse<>();
+        response.setStatus(200);
+        response.setMessage("success");
+        response.setResult(jenjangDb.findAll());
 
-    // Add mapel
-    @PostMapping("/")
-    public JenjangModel createMapel (@RequestBody JenjangModel mapel) {
-        return jenjangDb.save(mapel);
+        return response;
     }
 
 
