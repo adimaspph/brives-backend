@@ -61,14 +61,14 @@ public class UserRestController {
                     newUser.setUsername(staff.username);
                     newUser.setNamaLengkap(staff.namaLengkap);
                     newUser.setEmail(staff.email);
-                    newUser.setPassword(staff.password); //belum enkripsi
+                    newUser.setPassword(staff.password);
                     newUser.setNoHP(staff.noHP);
                     newUser.setStaff(newStaff);
 
                     RoleModel role = roleDb.findByNamaRole(staff.getRole()).get();
                     newUser.setRole(role);
                     newUser.setStaff(newStaff);
-                    userRestService.createUser(newUser); //disini error
+                    userRestService.createUser(newUser);
                     newStaff.setUser(newUser);
                     newStaff = staffRestService.updateStaff(newStaff.getIdStaff(), newStaff);
                     response.setStatus(200);
