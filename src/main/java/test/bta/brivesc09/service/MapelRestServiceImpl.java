@@ -24,12 +24,7 @@ public class MapelRestServiceImpl implements MapelRestService {
 
     @Override
     public MapelModel getMapelById(Long id) {
-        Optional<MapelModel> mapel = mapelDb.findByIdMapel(id);
-        if (mapel.isPresent()) {
-            return mapel.get();
-        }
-        return null;
-
+        return mapelDb.findByIdMapel(id);
     }
 
 

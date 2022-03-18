@@ -16,6 +16,7 @@ import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.JadwalRest;
 import test.bta.brivesc09.service.JadwalRestService;
 import test.bta.brivesc09.service.MapelRestService;
+import test.bta.brivesc09.service.StaffRestService;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -34,7 +35,7 @@ public class JadwalRestController {
     private MapelRestService mapelRestService;
 
     @Autowired
-    private MapelDb mapelDb;
+    private StaffRestService staffRestService;
 
     @GetMapping("/")
     public List<JadwalModel> getAllJadwal() {
@@ -66,11 +67,10 @@ public class JadwalRestController {
                 JadwalModel jadwal = new JadwalModel();
                 jadwal.setTanggal(LocalDate.of(jadwalrest.tahun, jadwalrest.bulan, jadwalrest.tanggal));
                 jadwal.setWaktuMulai(start);
-                jadwal.setWaktuSelesai(start.plusMinutes(90));
 
                 jadwal.setMapel(mapelRestService.getMapelById((long) 1));
                 jadwal.setJenisKelas(JenisKelas.PRIVATE);
-                jadwal.setStaff(new StaffModel());
+                jadwal.setStaff(staffRestService.getStaffByIdStaff((long) 1));
 
                 JadwalModel newJadwal = jadwalRestService.createJadwal(jadwal);
 
@@ -78,15 +78,19 @@ public class JadwalRestController {
                 response.setMessage("success");
                 response.setResult(newJadwal);
 
-            } catch (DataIntegrityViolationException e) {
-                response.setStatus(400);
-                response.setMessage("Jadwal bertabrakan");
-                response.setResult(null);
+            } catch (UnsupportedOperationException e) {
+//                response.setStatus(400);
+//                response.setMessage("Jadwal bertabrakan");
+//                response.setResult(null);
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_ACCEPTABLE, "Jadwal bertabrakan", e);
 
             } catch (Exception e) {
-                response.setStatus(500);
-                response.setMessage(e.toString());
-                response.setResult(null);
+//                response.setStatus(500);
+//                response.setMessage(e.toString());
+//                response.setResult(null);
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, e.toString());
             }
             return response;
         }

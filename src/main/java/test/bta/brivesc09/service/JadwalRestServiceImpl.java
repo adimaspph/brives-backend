@@ -1,6 +1,7 @@
 package test.bta.brivesc09.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import test.bta.brivesc09.model.JadwalModel;
 import test.bta.brivesc09.repository.JadwalDb;
@@ -23,6 +24,24 @@ public class JadwalRestServiceImpl implements JadwalRestService{
 
     @Override
     public JadwalModel createJadwal(JadwalModel jadwal) {
+        jadwal.setWaktuSelesai(jadwal.getWaktuMulai().plusMinutes(90));
+
+        List<JadwalModel> listJadwalLama = jadwalDb.findByTanggal(jadwal.getTanggal());
+
+        for (JadwalModel jadwalLama : listJadwalLama) {
+            if (jadwal.getWaktuMulai().equals(jadwalLama.getWaktuMulai())) {
+                throw new UnsupportedOperationException("Jadwal bertabrakan dengan jadwal yang telah ada");
+            }
+            if (jadwal.getWaktuSelesai().equals(jadwalLama.getWaktuSelesai())) {
+                throw new UnsupportedOperationException("Jadwal bertabrakan dengan jadwal yang telah ada");
+            }
+            if (jadwal.getWaktuMulai().isBefore(jadwalLama.getWaktuSelesai()) && jadwal.getWaktuMulai().isAfter(jadwalLama.getWaktuMulai()) ){
+                throw new UnsupportedOperationException("Jadwal bertabrakan dengan jadwal yang telah ada");
+            }
+            if (jadwal.getWaktuSelesai().isBefore(jadwalLama.getWaktuSelesai()) && jadwal.getWaktuSelesai().isAfter(jadwalLama.getWaktuMulai()) ){
+                throw new UnsupportedOperationException("Jadwal bertabrakan dengan jadwal yang telah ada");
+            }
+        }
         return jadwalDb.save(jadwal);
     }
 
