@@ -10,6 +10,9 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,6 +21,7 @@ import java.util.List;
 @Setter @Getter
 @Entity
 @Table(name = "siswa")
+@JsonIgnoreProperties(value={"user"},allowSetters = true)
 public class SiswaModel implements Serializable {
 
     @Id
@@ -28,7 +32,7 @@ public class SiswaModel implements Serializable {
     @Size(max = 50)
     @Column(name="asal_sekolah")
     private String asalSekolah;
-
+    
     @OneToOne(mappedBy = "siswa")
     private UserModel user;
 
