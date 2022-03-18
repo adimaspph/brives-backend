@@ -115,7 +115,7 @@ public class MapelRestController {
                 newMapel.setListStaff(mapel.getListStaff());
                 newMapel.setListJadwal(mapel.getListJadwal());
 
-                MapelModel savedMapel = mapelDb.save(mapel);
+                MapelModel savedMapel = mapelDb.save(newMapel);
                 response.setStatus(200);
                 response.setMessage("success");
                 response.setResult(savedMapel);
