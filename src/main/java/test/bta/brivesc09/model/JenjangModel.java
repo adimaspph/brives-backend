@@ -35,4 +35,27 @@ public class JenjangModel implements Serializable {
     @ManyToMany(mappedBy = "listJenjang")
     private List<MapelModel> listMapel;
 
+    public Long getIdJenjang() {
+        return idJenjang;
+    }
+
+    public void setIdJenjang(Long idJenjang) {
+        this.idJenjang = idJenjang;
+    }
+
+    public String getNamaJenjang() {
+        return namaJenjang;
+    }
+
+    public void setNamaJenjang(String namaJenjang) {
+        this.namaJenjang = namaJenjang;
+    }
+
+    public List<MapelModel> getListMapel() {
+        return listMapel;
+    }
+
+    public void setListMapel(List<MapelModel> listMapel) {
+        this.listMapel = listMapel;
+    }
 }
