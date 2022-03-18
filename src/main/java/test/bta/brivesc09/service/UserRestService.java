@@ -8,4 +8,5 @@ public interface UserRestService {
    List<UserModel> getAllUser();
    UserModel getUserByUsername(String username);
    void deleteUser(String username);
+   String encrypt(String data);
 }
