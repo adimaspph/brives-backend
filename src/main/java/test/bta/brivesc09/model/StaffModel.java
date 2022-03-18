@@ -4,12 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -18,6 +22,7 @@ import java.util.List;
 @Setter @Getter
 @Entity
 @Table(name = "Staff")
+@JsonIgnoreProperties(value={"user"},allowSetters = true)
 public class StaffModel implements Serializable {
 
     @Id
@@ -36,7 +41,8 @@ public class StaffModel implements Serializable {
     @ManyToMany(mappedBy = "listStaff")
     List<MapelModel> listMapel;
 
-    @OneToOne(mappedBy = "staff")
+    @OneToOne(mappedBy = "staff", orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserModel user;
 
     //Jadwal
