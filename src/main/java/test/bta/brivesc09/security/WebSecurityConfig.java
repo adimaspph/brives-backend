@@ -12,6 +12,9 @@ import org.springframework.web.cors.*;
 
 import lombok.AllArgsConstructor;
 
+import java.util.Arrays;
+import java.util.List;
+
 @EnableWebSecurity
 @AllArgsConstructor
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -39,6 +42,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
     CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+    corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://brives-staging.herokuapp.com"));
+    corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
     corsConfiguration.addAllowedMethod(HttpMethod.DELETE);
     corsConfiguration.addAllowedMethod(HttpMethod.PUT);
     corsConfiguration.addAllowedMethod(HttpMethod.OPTIONS);
