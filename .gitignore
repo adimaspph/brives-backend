@@ -34,4 +34,3 @@ build/
 
 ### Deployment ###
 application.properties
-/src/main/resources/application.properties
