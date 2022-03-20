@@ -41,7 +41,7 @@ deploy-heroku-staging:
     - export HEROKU_API_KEY=$HEROKU_API_KEY_STAGING
     - heroku run --app $HEROKU_APP_NAME_STAGING migrate
  environment:
-    name: production
+    name: staging
     url: $HEROKU_APP_HOST_STAGING
  only:
     - staging
