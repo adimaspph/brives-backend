@@ -14,8 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import javax.transaction.Transactional;
+
 
 @Service
+@Transactional
 public class UserDetailsServiceImpl implements UserDetailsService {
   @Autowired
   private UserDb userDb;
