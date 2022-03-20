@@ -1,33 +1,33 @@
 stages:
-  - build
   - deploy
+#   - build
 
-gradle-build:
-  image: maven:3-jdk-11
-  stage: build
-  script: "mvn clean install -Dmaven.test.skip=true"
-  artifacts:
-    paths:
-      - target/*.jar
-  only:
-    - staging
-    - main
+# gradle-build:
+#   image: maven:3-jdk-11
+#   stage: build
+#   script: "mvn clean install -Dmaven.test.skip=true"
+#   artifacts:
+#     paths:
+#       - target/*.jar
+#   only:
+#     - staging
+#     - main
 
-deploy-heroku:
- stage: deploy
- image: ruby:2.6
- before_script:
-    - gem install dpl --version 1.10.15
-    - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
- script:
-    - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
-    - export HEROKU_API_KEY=$HEROKU_API_KEY
-    - heroku run --app $HEROKU_APP_NAME migrate
- environment:
-    name: production
-    url: $HEROKU_APP_HOST
- only:
-    - staging
+# deploy-heroku:
+#  stage: deploy
+#  image: ruby:2.6
+#  before_script:
+#     - gem install dpl --version 1.10.15
+#     - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
+#  script:
+#     - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY
+#     - export HEROKU_API_KEY=$HEROKU_API_KEY
+#     - heroku run --app $HEROKU_APP_NAME migrate
+#  environment:
+#     name: production
+#     url: $HEROKU_APP_HOST
+#  only:
+#     - staging
 
 deploy-heroku-staging:
  stage: deploy
@@ -43,4 +43,4 @@ deploy-heroku-staging:
     name: production
     url: $HEROKU_APP_HOST_STAGING
  only:
-    - main
+    - staging
