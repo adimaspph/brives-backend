@@ -37,25 +37,29 @@ public class JadwalRestController {
     @Autowired
     private StaffRestService staffRestService;
 
-    @GetMapping("/")
-    public List<JadwalModel> getAllJadwal() {
-        return jadwalRestService.getAllJadwal();
-    }
+//    @GetMapping()
+//    public List<JadwalModel> getAllJadwal() {
+//        return jadwalRestService.getAllJadwal();
+//    }
 
-    @GetMapping("/{tanggal}")
-    public List<JadwalModel> getAllJadwalByTanggal(@PathVariable LocalDate tanggal) {
-        return jadwalRestService.getListJadwalByTanggal(tanggal);
+    @GetMapping()
+    public BaseResponse<List<JadwalModel>> getAllJadwalByTanggal(
+            @RequestParam Integer tanggal,
+            @RequestParam Integer bulan,
+            @RequestParam Integer tahun
+        ) {
+        BaseResponse<List<JadwalModel>> response = new BaseResponse<>();
+
+        response.setResult(jadwalRestService.getListJadwalByTanggal(LocalDate.of(tahun, bulan, tanggal)));
+        return response;
     }
 
     // Create jadwal
-    @PostMapping("/")
+    @PostMapping()
     public BaseResponse<JadwalModel> createJadwal (
             @Valid @RequestBody JadwalRest jadwalrest,
             BindingResult bindingResult
     ) {
-//        System.out.println(jadwalrest.tahun + jadwalrest.bulan + jadwalrest.tanggal + jadwalrest.jam + jadwalrest.menit);
-
-//        int jam, menit, tahun, bulan, tanggal;
         BaseResponse<JadwalModel> response = new BaseResponse<>();
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(
