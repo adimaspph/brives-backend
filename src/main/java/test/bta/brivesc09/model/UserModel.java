@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -44,7 +45,8 @@ public class UserModel implements Serializable {
 
     @NotNull
     @Lob
-    @Column(name = "password", nullable = false)
+    @Type(type = "text")
+    @Column(name = "password", nullable = false, columnDefinition="TEXT")
     private String password;
 
     @Size(max = 50)
