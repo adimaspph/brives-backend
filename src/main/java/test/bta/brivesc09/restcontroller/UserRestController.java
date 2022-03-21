@@ -62,6 +62,7 @@ public class UserRestController {
             try {
                 StaffModel newStaff = new StaffModel();
                 newStaff.setNoPegawai(staff.getNoPegawai());
+                newStaff.setTarif(0);
                 newStaff = staffRestService.createStaff(newStaff);
                 UserModel newUser = new UserModel();
 
