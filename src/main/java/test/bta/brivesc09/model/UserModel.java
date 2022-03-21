@@ -1,6 +1,7 @@
 package test.bta.brivesc09.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ import java.io.Serializable;
 @Entity
 @Builder
 @Table(name="users")
+@JsonIgnoreProperties(value={"password"},allowSetters = true)
 public class UserModel implements Serializable {
 
     @Id
