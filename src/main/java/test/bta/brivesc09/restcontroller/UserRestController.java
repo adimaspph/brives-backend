@@ -98,7 +98,7 @@ public class UserRestController {
                     
             } catch (DataIntegrityViolationException e){
                 response.setStatus(400);
-                response.setMessage("Email telah terdaftar");
+                response.setMessage("Username telah terdaftar");
                 response.setResult(null);
             } catch (Exception e) {
                 response.setStatus(500);
