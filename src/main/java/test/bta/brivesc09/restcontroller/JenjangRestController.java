@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "https://brives-staging.herokuapp.com")
 @RestController
 @RequestMapping("jenjang")
 public class JenjangRestController {

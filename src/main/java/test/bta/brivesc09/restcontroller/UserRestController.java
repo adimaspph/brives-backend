@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+@CrossOrigin(origins = "https://brives-staging.herokuapp.com")
 @RestController
 @RequestMapping("/api/v1/user")
 public class UserRestController {
