@@ -39,7 +39,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     }
     public AuthenticationFilter(AuthenticationManager authenticationManager, ApplicationContext ctx) {
       	this.authenticationManager = authenticationManager;
-     	 this.userDb = (UserDb) ctx.getBean(UserDb.class);
+     	this.userDb = (UserDb) ctx.getBean(UserDb.class);
       	setFilterProcessesUrl("/api/user/login");
     }
 

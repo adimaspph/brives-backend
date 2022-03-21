@@ -2,12 +2,18 @@ package test.bta.brivesc09.service;
 
 import test.bta.brivesc09.model.UserModel;
 import test.bta.brivesc09.repository.UserDb;
+import test.bta.brivesc09.security.SecurityConstants;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -47,5 +53,18 @@ public class UserRestServiceImpl implements UserRestService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String hash = encoder.encode(password);
         return hash;
+    }
+
+    @Override
+    public UserModel getUserFromJwt(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        if (token != null && token.length() != 0) {
+          String user = JWT.require(Algorithm.HMAC512(SecurityConstants.KEY.getBytes()))
+              .build()
+              .verify(token.replace("Bearer ", ""))
+              .getSubject();
+          return userDb.findByUsername(user).get();
+        }
+        return null;
     }
 }

@@ -22,7 +22,7 @@ import java.util.List;
 @Setter @Getter
 @Entity
 @Table(name = "Staff")
-@JsonIgnoreProperties(value={"user"},allowSetters = true)
+@JsonIgnoreProperties(value={"user","listJadwal","log"},allowSetters = true)
 public class StaffModel implements Serializable {
 
     @Id

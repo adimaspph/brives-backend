@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
 @AllArgsConstructor
@@ -14,6 +17,7 @@ import java.io.Serializable;
 @Setter @Getter
 @Entity
 @Table(name = "log")
+@JsonIgnoreProperties(value={"staff"},allowSetters = true)
 public class LogModel implements Serializable {
 
     @Id
