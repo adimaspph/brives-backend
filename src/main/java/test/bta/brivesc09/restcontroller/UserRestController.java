@@ -62,7 +62,6 @@ public class UserRestController {
             try {
                 StaffModel newStaff = new StaffModel();
                 newStaff.setNoPegawai(staff.getNoPegawai());
-                newStaff.setTarif(staff.getTarif());
                 newStaff = staffRestService.createStaff(newStaff);
                 UserModel newUser = new UserModel();
 
@@ -86,6 +85,7 @@ public class UserRestController {
                         mapels.add(mataPelajaran);
                     }
                     newStaff.setListMapel(mapels);
+                    newStaff.setTarif(staff.getTarif());
                 }
                 
                 userRestService.createUser(newUser);
