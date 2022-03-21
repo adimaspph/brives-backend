@@ -60,8 +60,18 @@ public class UserRestController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
         } else {
             try {
+                String allErrorMessage = userRestService.checkConditions(staff);
+                
+                if (!allErrorMessage.equals("")) {
+                    response.setStatus(999);
+                    response.setMessage(allErrorMessage);
+                    response.setResult(null);
+                    return response;
+                }
+
                 StaffModel newStaff = new StaffModel();
                 newStaff.setNoPegawai(staff.getNoPegawai());
+                newStaff.setTarif(0);
                 newStaff = staffRestService.createStaff(newStaff);
                 UserModel newUser = new UserModel();
 
@@ -92,12 +102,12 @@ public class UserRestController {
                 newStaff.setUser(newUser);
                 newStaff = staffRestService.updateStaff(newStaff.getIdStaff(), newStaff);
                 response.setStatus(200);
-                response.setMessage("success");
+                response.setMessage("User berhasil terbuat");
                 response.setResult(newUser);
                     
             } catch (DataIntegrityViolationException e){
                 response.setStatus(400);
-                response.setMessage("Email telah terdaftar");
+                response.setMessage("Username telah terdaftar");
                 response.setResult(null);
             } catch (Exception e) {
                 response.setStatus(500);
