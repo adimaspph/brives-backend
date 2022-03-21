@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @CrossOrigin(origins = "https://brives-staging.herokuapp.com")
+
 @RestController
 @RequestMapping("mapel")
 public class MapelRestController {
