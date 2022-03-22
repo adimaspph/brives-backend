@@ -161,14 +161,15 @@ public class UserRestController {
         
     }
 
-    @GetMapping("/{id}")
-    public BaseResponse<UserModel> getUserById(@PathVariable Long id) {
+    @GetMapping("/{username}")
+    public BaseResponse<UserModel> getUserById(@PathVariable String username) {
         BaseResponse<UserModel> response = new BaseResponse<>();
         try{
-            if (userDb.findByIdUser(id) != null){
+            UserModel user = userRestService.getUserByUsername(username);
+            if (user != null){
                 response.setStatus(200);
                 response.setMessage("success");
-                response.setResult(userDb.findByIdUser(id));
+                response.setResult(user);
             } else {
                 response.setStatus(400);
                 response.setMessage("null");
@@ -183,15 +184,15 @@ public class UserRestController {
         return response;
     }
 
-    @GetMapping("/role/{id}")
-    public BaseResponse<RoleModel> getUserRole(@PathVariable Long id) {
+    @GetMapping("/role/{username}")
+    public BaseResponse<RoleModel> getUserRole(@PathVariable String username) {
         BaseResponse<RoleModel> response = new BaseResponse<>();
         try{
-            UserModel newUser = userDb.findByIdUser(id);
+            UserModel user = userRestService.getUserByUsername(username);
 
             response.setStatus(200);
             response.setMessage("success");
-            response.setResult(newUser.getRole());
+            response.setResult(user.getRole());
 
         } catch (Exception e) {
             response.setStatus(400);
