@@ -176,6 +176,26 @@ public class UserRestController {
         return response;
     }
 
+    @GetMapping("/role/{id}")
+    public BaseResponse<RoleModel> getUserRole(@PathVariable Long id) {
+        BaseResponse<RoleModel> response = new BaseResponse<>();
+        try{
+            UserModel newUser = userDb.findByIdUser(id);
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(newUser.getRole());
+
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
+
+
+
 }
 
 
