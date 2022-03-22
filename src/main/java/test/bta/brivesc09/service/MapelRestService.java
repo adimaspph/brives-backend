@@ -9,5 +9,6 @@ public interface MapelRestService {
 //    MapelModel getStaffByIdStaff(Long idStaff);
 //    MapelModel updateStaff(Long idStaff, MapelModel StaffUpdate);
 //    void deleteStaff(Long idStaff);
+    MapelModel deleteByIdMapel(Long idMapel);
     MapelModel getMapelById(Long id);
 }
