@@ -78,7 +78,7 @@ public class UserRestServiceImpl implements UserRestService {
             message += "Password harus terdiri atas lebih dari 8 karakter;";
         }
         // 2) username udah terdaftar + nomor pegawai udah terdaftar
-        if (userDb.findByUsername(staff.getUsername()).get() != null) {
+        if (getUserByUsername(staff.getUsername()) != null) {
             message += "Username telah terdaftar;";
         }
         return message;
