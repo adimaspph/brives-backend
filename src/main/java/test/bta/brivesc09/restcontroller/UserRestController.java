@@ -90,7 +90,7 @@ public class UserRestController {
                 RoleModel role = roleDb.findByNamaRole(staff.getRole()).get();
                 newUser.setRole(role);
                 newUser.setStaff(newStaff);
-
+                
                 if (staff.getRole().equalsIgnoreCase("pengajar")) {
                     List<MapelModel> mapels = new ArrayList<>();
                     System.out.println(staff.getListMapel());
