@@ -90,8 +90,15 @@ public class UserRestController {
 
                 if (staff.getRole().equalsIgnoreCase("pengajar")) {
                     List<MapelModel> mapels = new ArrayList<>();
-                    for (String mapel : staff.listMapel) {
+                    System.out.println(staff.getListMapel());
+                    for (String mapel : staff.getListMapel()) {
+                        System.out.println(mapel);
+                        System.out.println("aku masuk");
                         MapelModel mataPelajaran = mapelDb.findByNamaMapel(mapel).get();
+                        List<StaffModel> temp = mataPelajaran.getListStaff();
+                        temp.add(newStaff);
+                        mataPelajaran.setListStaff(temp);
+                        mapelDb.save(mataPelajaran);
                         mapels.add(mataPelajaran);
                     }
                     newStaff.setListMapel(mapels);
