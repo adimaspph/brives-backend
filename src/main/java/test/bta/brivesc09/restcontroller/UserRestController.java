@@ -50,6 +50,9 @@ public class UserRestController {
     private RoleDb roleDb;
 
     @Autowired
+    private UserDb userDb;
+
+    @Autowired
     private MapelDb mapelDb;
 
 
@@ -156,6 +159,28 @@ public class UserRestController {
         }
 
         
+    }
+
+    @GetMapping("/{id}")
+    public BaseResponse<UserModel> getUserById(@PathVariable Long id) {
+        BaseResponse<UserModel> response = new BaseResponse<>();
+        try{
+            if (userDb.findByIdUser(id) != null){
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(userDb.findByIdUser(id));
+            } else {
+                response.setStatus(400);
+                response.setMessage("null");
+                response.setResult(null);
+            }
+
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
     }
 
 }
