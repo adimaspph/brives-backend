@@ -1,5 +1,6 @@
 package test.bta.brivesc09.restcontroller;
 
+import test.bta.brivesc09.repository.StaffDb;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.StaffDTO;
 import test.bta.brivesc09.model.UserModel;
@@ -25,16 +26,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import java.text.ParseException;
-import java.util.UUID;
+import java.util.*;
 
 import javax.persistence.EmbeddedId;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 @CrossOrigin(origins = "https://brives-staging.herokuapp.com")
 @RestController
@@ -47,7 +44,13 @@ public class UserRestController {
     private StaffRestService staffRestService;
 
     @Autowired
+    private MapelRestService mapelRestService;
+
+    @Autowired
     private RoleDb roleDb;
+
+    @Autowired
+    private StaffDb staffDb;
 
     @Autowired
     private UserDb userDb;
@@ -71,7 +74,7 @@ public class UserRestController {
                     response.setResult(null);
                     return response;
                 }
-
+                System.out.println("awal " + staff.getRole());
                 StaffModel newStaff = new StaffModel();
                 newStaff.setNoPegawai(staff.getNoPegawai());
                 newStaff.setTarif(0);
@@ -90,13 +93,11 @@ public class UserRestController {
                 RoleModel role = roleDb.findByNamaRole(staff.getRole()).get();
                 newUser.setRole(role);
                 newUser.setStaff(newStaff);
-
-                if (staff.getRole().equalsIgnoreCase("pengajar")) {
-                    List<MapelModel> mapels = new ArrayList<>();
-                    System.out.println(staff.getListMapel());
+                List<MapelModel> mapels = new ArrayList<>();
+                Integer tarif = 0;
+                newStaff.setTarif(staff.getTarif());
+                if (staff.getRole().equalsIgnoreCase("PENGAJAR")) {
                     for (String mapel : staff.getListMapel()) {
-                        System.out.println(mapel);
-                        System.out.println("aku masuk");
                         MapelModel mataPelajaran = mapelDb.findByNamaMapel(mapel).get();
                         List<StaffModel> temp = mataPelajaran.getListStaff();
                         temp.add(newStaff);
@@ -104,9 +105,11 @@ public class UserRestController {
                         mapelDb.save(mataPelajaran);
                         mapels.add(mataPelajaran);
                     }
+                    tarif = staff.getTarif();
                     newStaff.setListMapel(mapels);
-                    newStaff.setTarif(staff.getTarif());
+                    
                 }
+                newStaff.setTarif(tarif);
                 
                 userRestService.createUser(newUser);
                 newStaff.setUser(newUser);
@@ -139,6 +142,8 @@ public class UserRestController {
         return response;
     }
 
+
+
     @GetMapping("/auth")
     public BaseResponse<UserModel> getAuthenticatedUser(HttpServletRequest request) throws Exception {
         BaseResponse<UserModel> response = new BaseResponse<>();
@@ -160,6 +165,27 @@ public class UserRestController {
 
         
     }
+
+    @DeleteMapping("/{username}")
+    public BaseResponse<UserModel> deleteUser(@PathVariable String username) {
+        BaseResponse<UserModel> response = new BaseResponse<>();
+
+        try{
+            response.setStatus(200);
+            response.setMessage("success");
+            UserModel user = userRestService.getUserByUsername(username);
+            userRestService.deleteUser(user);
+
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+
+        return response;
+    }
+
+
 
     @GetMapping("/{username}")
     public BaseResponse<UserModel> getUserById(@PathVariable String username) {
