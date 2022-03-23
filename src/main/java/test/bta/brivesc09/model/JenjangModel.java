@@ -10,7 +10,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.io.Serializable;
 import java.util.List;
@@ -21,7 +23,8 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "jenjang")
-@JsonIgnoreProperties(value={"listMapel"},allowSetters = true)
+// @JsonIgnoreProperties(value={"listMapel"},allowSetters = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idJenjang")
 public class JenjangModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

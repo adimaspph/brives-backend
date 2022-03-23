@@ -1,8 +1,12 @@
 package test.bta.brivesc09.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +29,7 @@ import java.util.List;
 @Entity
 @Table(name = "jadwal")
 @JsonIgnoreProperties(value={"staff", "siswa", "log", "listPesanan"},allowSetters = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idJadwal")
 public class JadwalModel implements Serializable {
 
     @Id

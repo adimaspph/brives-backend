@@ -12,18 +12,23 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.io.Serializable;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter @Getter
+@Setter
+@Getter
 @Entity
 @Table(name = "Staff")
-@JsonIgnoreProperties(value={"listJadwal","log"},allowSetters = true)
+@JsonIgnoreProperties(value = { "listJadwal", "log" }, allowSetters = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idStaff")
 public class StaffModel implements Serializable {
 
     @Id
@@ -32,26 +37,27 @@ public class StaffModel implements Serializable {
 
     @NotNull
     @Size(max = 50)
-    @Column(name="no_pegawai")
+    @Column(name = "no_pegawai")
     private String noPegawai;
 
     @NotNull
-    @Column(name="tarif")
+    @Column(name = "tarif")
     private Integer tarif;
 
+    @JsonBackReference
     @ManyToMany(mappedBy = "listStaff")
     List<MapelModel> listMapel;
 
-    @JsonManagedReference
+    // @JsonManagedReference
     @OneToOne(mappedBy = "staff", orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UserModel user;
 
-    //Jadwal
-    @OneToMany(mappedBy="staff")
+    // Jadwal
+    @OneToMany(mappedBy = "staff")
     private List<JadwalModel> listJadwal;
 
-    //Log
-    @OneToMany(mappedBy="staff")
+    // Log
+    @OneToMany(mappedBy = "staff")
     private List<LogModel> log;
 }
