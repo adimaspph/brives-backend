@@ -171,7 +171,6 @@ public class UserRestController {
             response.setStatus(200);
             response.setMessage("success");
             UserModel user = userRestService.getUserByUsername(username);
-
             userRestService.deleteUser(user);
 
         } catch (Exception e) {
