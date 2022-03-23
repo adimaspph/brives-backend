@@ -7,7 +7,10 @@ import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.StaffDTO;
 import test.bta.brivesc09.service.MapelRestServiceImpl;
 import test.bta.brivesc09.model.MapelModel;
+import test.bta.brivesc09.model.UserModel;
 import test.bta.brivesc09.repository.MapelDb;
+import test.bta.brivesc09.repository.UserDb;
+
 //import test.bta.brivesc09.service.StaffRestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,6 +33,9 @@ public class MapelRestController {
 
     @Autowired
     private MapelDb mapelDb;
+
+    @Autowired
+    private UserDb userDb;
 
     @Autowired
     private MapelRestServiceImpl mapelService;
@@ -151,4 +157,19 @@ public class MapelRestController {
         return response;
     }
 
+    @GetMapping("/pengajar/{id}")
+    public BaseResponse<List<UserModel>> getPengajarByMapel(@PathVariable Long id) {
+        BaseResponse<List<UserModel>> response = new BaseResponse<>();
+        try {
+            List<UserModel> data = userDb.findByStaff_ListMapel_IdMapel(id);
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(data);
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
 }

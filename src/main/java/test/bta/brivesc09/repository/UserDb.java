@@ -4,10 +4,15 @@ import test.bta.brivesc09.model.RoleModel;
 import test.bta.brivesc09.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserDb extends JpaRepository<UserModel, Long>{
-   Optional<UserModel> findByUsername(String username);
-   UserModel findByIdUser(Long idUser);
+public interface UserDb extends JpaRepository<UserModel, Long> {
+    Optional<UserModel> findByUsername(String username);
+
+    UserModel findByIdUser(Long idUser);
+
+    List<UserModel> findByStaff_ListMapel_IdMapel(Long idMapel);
 }
