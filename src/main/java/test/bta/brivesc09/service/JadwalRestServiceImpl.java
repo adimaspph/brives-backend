@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import test.bta.brivesc09.model.JadwalModel;
+import test.bta.brivesc09.model.StaffModel;
 import test.bta.brivesc09.repository.JadwalDb;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,7 +28,7 @@ public class JadwalRestServiceImpl implements JadwalRestService{
     public JadwalModel createJadwal(JadwalModel jadwal) {
         jadwal.setWaktuSelesai(jadwal.getWaktuMulai().plusMinutes(90));
 
-        List<JadwalModel> listJadwalLama = jadwalDb.findByTanggal(jadwal.getTanggal());
+        List<JadwalModel> listJadwalLama = jadwalDb.findByTanggalAndStaff(jadwal.getTanggal(), jadwal.getStaff());
 
         for (JadwalModel jadwalLama : listJadwalLama) {
             if (jadwal.getWaktuMulai().equals(jadwalLama.getWaktuMulai())) {
@@ -46,8 +48,10 @@ public class JadwalRestServiceImpl implements JadwalRestService{
     }
 
     @Override
-    public List<JadwalModel> getListJadwalByTanggal(LocalDate tanggal) {
-        return jadwalDb.findByTanggal(tanggal);
+    public List<JadwalModel> getListJadwalByTanggal(LocalDate tanggal, StaffModel staff) {
+        List<JadwalModel> result = new ArrayList<>();
+        List<JadwalModel> listJadwal = jadwalDb.findByTanggalAndStaff(tanggal, staff);
+        return listJadwal;
     }
 
     @Override

@@ -6,10 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import test.bta.brivesc09.model.JadwalModel;
-import test.bta.brivesc09.model.JenisKelas;
-import test.bta.brivesc09.model.MapelModel;
-import test.bta.brivesc09.model.StaffModel;
+import test.bta.brivesc09.model.*;
 import test.bta.brivesc09.repository.JadwalDb;
 import test.bta.brivesc09.repository.MapelDb;
 import test.bta.brivesc09.rest.BaseResponse;
@@ -17,7 +14,9 @@ import test.bta.brivesc09.rest.JadwalRest;
 import test.bta.brivesc09.service.JadwalRestService;
 import test.bta.brivesc09.service.MapelRestService;
 import test.bta.brivesc09.service.StaffRestService;
+import test.bta.brivesc09.service.UserRestService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -37,6 +36,9 @@ public class JadwalRestController {
     @Autowired
     private StaffRestService staffRestService;
 
+    @Autowired
+    private UserRestService userRestService;
+
 //    @GetMapping()
 //    public List<JadwalModel> getAllJadwal() {
 //        return jadwalRestService.getAllJadwal();
@@ -44,37 +46,40 @@ public class JadwalRestController {
 
     @GetMapping()
     public BaseResponse<List<JadwalModel>> getAllJadwalByTanggal(
+            HttpServletRequest request,
             @RequestParam Integer tanggal,
             @RequestParam Integer bulan,
             @RequestParam Integer tahun
         ) {
         BaseResponse<List<JadwalModel>> response = new BaseResponse<>();
-
-        response.setResult(jadwalRestService.getListJadwalByTanggal(LocalDate.of(tahun, bulan, tanggal)));
+        UserModel authUser = userRestService.getUserFromJwt(request);
+        response.setResult(jadwalRestService.getListJadwalByTanggal(LocalDate.of(tahun, bulan, tanggal), authUser.getStaff()));
         return response;
     }
 
     // Create jadwal
     @PostMapping()
     public BaseResponse<JadwalModel> createJadwal (
-            @Valid @RequestBody JadwalRest jadwalrest,
+            HttpServletRequest request,
+            @Valid @RequestBody JadwalRest jadwalRest,
             BindingResult bindingResult
     ) {
         BaseResponse<JadwalModel> response = new BaseResponse<>();
+        UserModel authUser = userRestService.getUserFromJwt(request);
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Request body has invalid type or missong field"
             );
         } else {
             try{
-                LocalTime start = LocalTime.of(jadwalrest.jam, jadwalrest.menit);
+                LocalTime start = LocalTime.of(jadwalRest.jam, jadwalRest.menit);
                 JadwalModel jadwal = new JadwalModel();
-                jadwal.setTanggal(LocalDate.of(jadwalrest.tahun, jadwalrest.bulan, jadwalrest.tanggal));
+                jadwal.setTanggal(LocalDate.of(jadwalRest.tahun, jadwalRest.bulan, jadwalRest.tanggal));
                 jadwal.setWaktuMulai(start);
 
-                jadwal.setMapel(mapelRestService.getMapelById((long) 1));
-                jadwal.setJenisKelas(JenisKelas.PRIVATE);
-                jadwal.setStaff(staffRestService.getStaffByIdStaff((long) 1));
+                jadwal.setMapel(mapelRestService.getMapelById(jadwalRest.mapel));
+                jadwal.setJenisKelas(jadwalRest.jenisKelas);
+                jadwal.setStaff(authUser.getStaff());
 
                 JadwalModel newJadwal = jadwalRestService.createJadwal(jadwal);
 
