@@ -39,11 +39,6 @@ public class JadwalRestController {
     @Autowired
     private UserRestService userRestService;
 
-//    @GetMapping()
-//    public List<JadwalModel> getAllJadwal() {
-//        return jadwalRestService.getAllJadwal();
-//    }
-
     @GetMapping()
     public BaseResponse<List<JadwalModel>> getAllJadwalByTanggal(
             HttpServletRequest request,
@@ -52,9 +47,25 @@ public class JadwalRestController {
             @RequestParam Integer tahun
         ) {
         BaseResponse<List<JadwalModel>> response = new BaseResponse<>();
-        UserModel authUser = userRestService.getUserFromJwt(request);
-        response.setResult(jadwalRestService.getListJadwalByTanggal(LocalDate.of(tahun, bulan, tanggal), authUser.getStaff()));
-        return response;
+        if (tanggal == null || bulan == null || tahun == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
+            );
+        } else {
+            try{
+                UserModel authUser = userRestService.getUserFromJwt(request);
+                response.setResult(jadwalRestService.getListJadwalByTanggal(LocalDate.of(tahun, bulan, tanggal), authUser.getStaff()));
+
+            } catch (NullPointerException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.UNAUTHORIZED, "User not authenticated", e);
+
+            } catch (Exception e) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, e.toString());
+            }
+            return response;
+        }
     }
 
     // Create jadwal
@@ -68,7 +79,7 @@ public class JadwalRestController {
         UserModel authUser = userRestService.getUserFromJwt(request);
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Request body has invalid type or missong field"
+                    HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
             );
         } else {
             try{

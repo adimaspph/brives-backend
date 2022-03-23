@@ -24,7 +24,7 @@ import java.util.List;
 @Setter @Getter
 @Entity
 @Table(name = "jadwal")
-@JsonIgnoreProperties(value={"staff", "mapel", "siswa", "log", "listPesanan"},allowSetters = true)
+@JsonIgnoreProperties(value={"staff", "siswa", "log", "listPesanan"},allowSetters = true)
 public class JadwalModel implements Serializable {
 
     @Id
