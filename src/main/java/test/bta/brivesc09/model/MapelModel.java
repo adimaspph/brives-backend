@@ -9,7 +9,11 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -23,6 +27,7 @@ import java.util.List;
 @Getter
 @Table(name = "mapel")
 // @JsonIgnoreProperties(value={"listStaff", "listJadwal"},allowSetters = true)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idMapel")
 public class MapelModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
