@@ -80,7 +80,7 @@ public class JadwalModel implements Serializable {
     private SiswaModel siswa;
 
     // Log
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "id_log", referencedColumnName = "idLog")
     private LogModel log;
 
