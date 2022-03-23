@@ -29,7 +29,7 @@ import java.util.List;
 @Entity
 @Table(name = "jadwal")
 @JsonIgnoreProperties(value={"staff", "siswa", "log", "listPesanan"},allowSetters = true)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idJadwal")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, scope = JadwalModel.class, property = "idJadwal")
 public class JadwalModel implements Serializable {
 
     @Id

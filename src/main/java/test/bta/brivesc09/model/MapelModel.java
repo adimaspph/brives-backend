@@ -27,7 +27,7 @@ import java.util.List;
 @Getter
 @Table(name = "mapel")
 // @JsonIgnoreProperties(value={"listStaff", "listJadwal"},allowSetters = true)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idMapel")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, scope = MapelModel.class, property = "idMapel")
 public class MapelModel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
