@@ -11,7 +11,7 @@ public interface UserRestService {
    UserModel createUser(UserModel user);
    List<UserModel> getAllUser();
    UserModel getUserByUsername(String username);
-   void deleteUser(String username);
+   UserModel deleteUser(UserModel user);
    String encrypt(String data);
    UserModel getUserFromJwt(HttpServletRequest request);
    String checkConditions(StaffDTO staff);

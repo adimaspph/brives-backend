@@ -139,6 +139,8 @@ public class UserRestController {
         return response;
     }
 
+
+
     @GetMapping("/auth")
     public BaseResponse<UserModel> getAuthenticatedUser(HttpServletRequest request) throws Exception {
         BaseResponse<UserModel> response = new BaseResponse<>();
@@ -159,6 +161,26 @@ public class UserRestController {
         }
 
         
+    }
+
+    @DeleteMapping("/{username}")
+    public BaseResponse<UserModel> deleteUser(@PathVariable String username) {
+        BaseResponse<UserModel> response = new BaseResponse<>();
+
+        try{
+            response.setStatus(200);
+            response.setMessage("success");
+            UserModel user = userRestService.getUserByUsername(username);
+
+            userRestService.deleteUser(user);
+
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+
+        return response;
     }
 
     @GetMapping("/{username}")

@@ -44,9 +44,11 @@ public class UserRestServiceImpl implements UserRestService {
    }
 
    @Override
-   public void deleteUser(String username) {
-       UserModel User = getUserByUsername(username);
-       userDb.delete(User);
+   public UserModel deleteUser(UserModel user) {
+       userDb.delete(user);
+
+
+       return user;
    }
 
    @Override
