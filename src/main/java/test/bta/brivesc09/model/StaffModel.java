@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
 import java.util.List;
@@ -41,6 +42,7 @@ public class StaffModel implements Serializable {
     @ManyToMany(mappedBy = "listStaff")
     List<MapelModel> listMapel;
 
+    @JsonManagedReference
     @OneToOne(mappedBy = "staff", orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private UserModel user;
