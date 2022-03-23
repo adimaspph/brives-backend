@@ -23,7 +23,7 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "jenjang")
-// @JsonIgnoreProperties(value={"listMapel"},allowSetters = true)
+@JsonIgnoreProperties(value={"listMapel"},allowSetters = true)
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idJenjang")
 public class JenjangModel implements Serializable {
     @Id
