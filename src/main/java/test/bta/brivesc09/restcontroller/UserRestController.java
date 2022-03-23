@@ -1,5 +1,6 @@
 package test.bta.brivesc09.restcontroller;
 
+import test.bta.brivesc09.repository.StaffDb;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.StaffDTO;
 import test.bta.brivesc09.model.UserModel;
@@ -25,16 +26,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import java.text.ParseException;
-import java.util.UUID;
+import java.util.*;
 
 import javax.persistence.EmbeddedId;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 @CrossOrigin(origins = "https://brives-staging.herokuapp.com")
 @RestController
@@ -47,7 +44,13 @@ public class UserRestController {
     private StaffRestService staffRestService;
 
     @Autowired
+    private MapelRestService mapelRestService;
+
+    @Autowired
     private RoleDb roleDb;
+
+    @Autowired
+    private StaffDb staffDb;
 
     @Autowired
     private UserDb userDb;
@@ -171,6 +174,19 @@ public class UserRestController {
             response.setStatus(200);
             response.setMessage("success");
             UserModel user = userRestService.getUserByUsername(username);
+            StaffModel staff = staffRestService.getStaffByIdStaff(user.getStaff().getIdStaff());
+
+//            List<MapelModel> object = new List<MapelModel>();
+            List<MapelModel> hh = new ArrayList<MapelModel>();
+//            for (MapelModel x : user.getStaff().getListMapel()) {
+//                user.getStaff().getListMapel().remove(x);
+//            }
+
+            staff.setListMapel(hh);
+            staffDb.save(staff);
+            System.out.println(user.getStaff().getListMapel().toString());
+            System.out.println(staff.getListMapel().toString());
+
             userRestService.deleteUser(user);
 
         } catch (Exception e) {
