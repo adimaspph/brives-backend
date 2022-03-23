@@ -28,7 +28,7 @@ import java.io.Serializable;
 @Builder
 @Table(name = "users")
 @JsonIgnoreProperties(value = { "password" }, allowSetters = true)
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idUser")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, scope = UserModel.class, property = "idUser")
 public class UserModel implements Serializable {
 
     @Id
