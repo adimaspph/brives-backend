@@ -5,6 +5,7 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.StaffDTO;
+import test.bta.brivesc09.service.MapelRestServiceImpl;
 import test.bta.brivesc09.model.MapelModel;
 import test.bta.brivesc09.repository.MapelDb;
 //import test.bta.brivesc09.service.StaffRestService;
@@ -30,6 +31,9 @@ public class MapelRestController {
     @Autowired
     private MapelDb mapelDb;
 
+    @Autowired
+    private MapelRestServiceImpl mapelService;
+
     @GetMapping("/")
     public BaseResponse<List<MapelModel>> getAllMapel() {
         BaseResponse<List<MapelModel>> response = new BaseResponse<>();
@@ -44,7 +48,7 @@ public class MapelRestController {
     public BaseResponse<List<MapelModel>> getAllMapelByNamaMapel(@PathVariable String namaMapel) {
         BaseResponse<List<MapelModel>> response = new BaseResponse<>();
         response.setResult(mapelDb.findAllByNamaMapel(namaMapel));
-        if (response.getResult().size() > 0){
+        if (response.getResult().size() > 0) {
             response.setStatus(400);
             response.setMessage("Mata Kuliah Sudah Ada");
             response.setResult(null);
@@ -56,9 +60,9 @@ public class MapelRestController {
         return response;
     }
 
-
     @RequestMapping("/")
-    public BaseResponse<MapelModel> createMapel(@Valid @RequestBody MapelModel mapel, BindingResult bindingResult) throws ParseException {
+    public BaseResponse<MapelModel> createMapel(@Valid @RequestBody MapelModel mapel, BindingResult bindingResult)
+            throws ParseException {
         BaseResponse<MapelModel> response = new BaseResponse<>();
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
@@ -85,11 +89,10 @@ public class MapelRestController {
         }
     }
 
-
     @GetMapping("/{id}")
     public BaseResponse<MapelModel> getMapelById(@PathVariable Long id) {
         BaseResponse<MapelModel> response = new BaseResponse<>();
-        try{
+        try {
             response.setStatus(200);
             response.setMessage("success");
             response.setResult(mapelDb.findByIdMapel(id));
@@ -101,9 +104,9 @@ public class MapelRestController {
         return response;
     }
 
-
     @PutMapping("/{id}")
-    public BaseResponse<MapelModel> updateMapel(@Valid @PathVariable Long id, @RequestBody MapelModel mapel, BindingResult bindingResult) throws ParseException {
+    public BaseResponse<MapelModel> updateMapel(@Valid @PathVariable Long id, @RequestBody MapelModel mapel,
+            BindingResult bindingResult) throws ParseException {
         BaseResponse<MapelModel> response = new BaseResponse<>();
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
@@ -129,5 +132,23 @@ public class MapelRestController {
         }
     }
 
+    @DeleteMapping("/{id}")
+    public BaseResponse<MapelModel> deleteMapelbyId(@PathVariable Long id) {
+        BaseResponse<MapelModel> response = new BaseResponse<>();
+        try {
+            MapelModel mapel = mapelDb.findByIdMapel(id);
+            mapelDb.delete(mapel);
+
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(null);
+
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
 
 }

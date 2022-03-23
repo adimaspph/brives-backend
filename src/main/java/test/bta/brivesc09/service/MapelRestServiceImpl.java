@@ -27,6 +27,11 @@ public class MapelRestServiceImpl implements MapelRestService {
         return mapelDb.findByIdMapel(id);
     }
 
-
+    @Override
+    public MapelModel deleteByIdMapel(Long idMapel) {
+        MapelModel mapel = getMapelById(idMapel);
+        mapelDb.deleteByIdMapel(idMapel);
+        return mapel;
+    }
 
 }

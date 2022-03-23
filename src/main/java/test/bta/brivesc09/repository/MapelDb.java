@@ -13,5 +13,5 @@ public interface MapelDb extends JpaRepository<MapelModel, Long>{
     Optional<MapelModel> findByNamaMapel(String namaMapel);
     List<MapelModel> findAll();
     List<MapelModel> findAllByNamaMapel(String namaMapel);
-
+    void deleteByIdMapel(Long idMapel);
 }
