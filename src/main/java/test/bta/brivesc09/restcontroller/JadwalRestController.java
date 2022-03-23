@@ -99,24 +99,34 @@ public class JadwalRestController {
                 response.setResult(newJadwal);
 
             } catch (UnsupportedOperationException e) {
-//                response.setStatus(400);
-//                response.setMessage("Jadwal bertabrakan");
-//                response.setResult(null);
                 throw new ResponseStatusException(
-                        HttpStatus.NOT_ACCEPTABLE, "Jadwal bertabrakan", e);
+                        HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
 
             } catch (Exception e) {
-//                response.setStatus(500);
-//                response.setMessage(e.toString());
-//                response.setResult(null);
                 throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, e.toString());
+                        HttpStatus.BAD_REQUEST, e.getMessage());
             }
             return response;
         }
+    }
 
+    @DeleteMapping("/{id}")
+    public BaseResponse<JadwalModel> deleteJadwalbyId(@PathVariable Long id) {
+        BaseResponse<JadwalModel> response = new BaseResponse<>();
+        try {
+            Boolean result = jadwalRestService.deleteJadwalById(id);
+            if (result == null) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Gagal delete");
+            }
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(null);
 
-
-//        return null;
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+        return response;
     }
 }
