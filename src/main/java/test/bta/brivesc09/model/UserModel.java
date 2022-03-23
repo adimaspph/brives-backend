@@ -1,5 +1,6 @@
 package test.bta.brivesc09.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.sun.istack.NotNull;
@@ -62,6 +63,7 @@ public class UserModel implements Serializable {
     private RoleModel role;
 
     //Relasi staff
+    @JsonBackReference
     @OneToOne(cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_staff", referencedColumnName = "idStaff")
