@@ -1,5 +1,6 @@
 package test.bta.brivesc09.restcontroller;
 
+import test.bta.brivesc09.repository.StaffDb;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.StaffDTO;
 import test.bta.brivesc09.model.UserModel;
@@ -25,16 +26,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import java.text.ParseException;
-import java.util.UUID;
+import java.util.*;
 
 import javax.persistence.EmbeddedId;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 @CrossOrigin(origins = "https://brives-staging.herokuapp.com")
 @RestController
@@ -47,7 +44,13 @@ public class UserRestController {
     private StaffRestService staffRestService;
 
     @Autowired
+    private MapelRestService mapelRestService;
+
+    @Autowired
     private RoleDb roleDb;
+
+    @Autowired
+    private StaffDb staffDb;
 
     @Autowired
     private UserDb userDb;
@@ -181,6 +184,8 @@ public class UserRestController {
 
         return response;
     }
+
+
 
     @GetMapping("/{username}")
     public BaseResponse<UserModel> getUserById(@PathVariable String username) {
