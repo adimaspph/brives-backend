@@ -174,19 +174,6 @@ public class UserRestController {
             response.setStatus(200);
             response.setMessage("success");
             UserModel user = userRestService.getUserByUsername(username);
-            StaffModel staff = staffRestService.getStaffByIdStaff(user.getStaff().getIdStaff());
-
-//            List<MapelModel> object = new List<MapelModel>();
-            List<MapelModel> hh = new ArrayList<MapelModel>();
-//            for (MapelModel x : user.getStaff().getListMapel()) {
-//                user.getStaff().getListMapel().remove(x);
-//            }
-
-            staff.setListMapel(hh);
-            staffDb.save(staff);
-            System.out.println(user.getStaff().getListMapel().toString());
-            System.out.println(staff.getListMapel().toString());
-
             userRestService.deleteUser(user);
 
         } catch (Exception e) {
@@ -197,6 +184,8 @@ public class UserRestController {
 
         return response;
     }
+
+
 
     @GetMapping("/{username}")
     public BaseResponse<UserModel> getUserById(@PathVariable String username) {

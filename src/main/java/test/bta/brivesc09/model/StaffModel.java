@@ -39,7 +39,6 @@ public class StaffModel implements Serializable {
     private Integer tarif;
 
     @ManyToMany(mappedBy = "listStaff")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     List<MapelModel> listMapel;
 
     @OneToOne(mappedBy = "staff", orphanRemoval = true)
