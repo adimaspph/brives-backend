@@ -71,7 +71,7 @@ public class UserRestController {
                     response.setResult(null);
                     return response;
                 }
-
+                System.out.println("awal " + staff.getRole());
                 StaffModel newStaff = new StaffModel();
                 newStaff.setNoPegawai(staff.getNoPegawai());
                 newStaff.setTarif(0);
@@ -90,13 +90,11 @@ public class UserRestController {
                 RoleModel role = roleDb.findByNamaRole(staff.getRole()).get();
                 newUser.setRole(role);
                 newUser.setStaff(newStaff);
-                
-                if (staff.getRole().equalsIgnoreCase("pengajar")) {
-                    List<MapelModel> mapels = new ArrayList<>();
-                    System.out.println(staff.getListMapel());
+                List<MapelModel> mapels = new ArrayList<>();
+                Integer tarif = 0;
+                newStaff.setTarif(staff.getTarif());
+                if (staff.getRole().equalsIgnoreCase("PENGAJAR")) {
                     for (String mapel : staff.getListMapel()) {
-                        System.out.println(mapel);
-                        System.out.println("aku masuk");
                         MapelModel mataPelajaran = mapelDb.findByNamaMapel(mapel).get();
                         List<StaffModel> temp = mataPelajaran.getListStaff();
                         temp.add(newStaff);
@@ -104,9 +102,11 @@ public class UserRestController {
                         mapelDb.save(mataPelajaran);
                         mapels.add(mataPelajaran);
                     }
+                    tarif = staff.getTarif();
                     newStaff.setListMapel(mapels);
-                    newStaff.setTarif(staff.getTarif());
+                    
                 }
+                newStaff.setTarif(tarif);
                 
                 userRestService.createUser(newUser);
                 newStaff.setUser(newUser);
