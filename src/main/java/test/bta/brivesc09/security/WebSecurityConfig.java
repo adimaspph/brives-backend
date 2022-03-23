@@ -25,7 +25,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http.cors().and().csrf().disable().authorizeRequests()
-//        .antMatchers("/api/v1/user/all").hasAuthority("ADMIN")
+       .antMatchers("/api/v1/user/all").hasAuthority("ADMIN")
+       .antMatchers("/api/v1/user/create").hasAuthority("ADMIN")
         .anyRequest().permitAll().and()
         .addFilter(new AuthenticationFilter(authenticationManager(), getApplicationContext()))
         .addFilter(new AuthorizationFilter(authenticationManager()))

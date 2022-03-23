@@ -122,8 +122,8 @@ public class MapelRestController {
                 newMapel.setNamaMapel(mapel.getNamaMapel());
                 newMapel.setListJenjang(mapel.getListJenjang());
                 newMapel.setDeskripsi(mapel.getDeskripsi());
-                newMapel.setListStaff(mapel.getListStaff());
-                newMapel.setListJadwal(mapel.getListJadwal());
+//                newMapel.setListStaff(mapel.getListStaff());
+//                newMapel.setListJadwal(mapel.getListJadwal());
 
                 MapelModel savedMapel = mapelDb.save(newMapel);
                 response.setStatus(200);
