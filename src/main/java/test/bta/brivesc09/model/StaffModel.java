@@ -51,7 +51,7 @@ public class StaffModel implements Serializable {
 
     // @JsonManagedReference
     @OneToOne(mappedBy = "staff", orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserModel user;
 
     // Jadwal
