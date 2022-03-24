@@ -68,13 +68,13 @@ public class UserModel implements Serializable {
     // Relasi staff
     // @JsonBackReference
     @OneToOne(cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_staff", referencedColumnName = "idStaff")
     private StaffModel staff;
 
     // Relasi siswa
     @OneToOne(cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "id_siswa", referencedColumnName = "idSiswa")
     private SiswaModel siswa;
 
