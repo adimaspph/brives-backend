@@ -2,6 +2,7 @@ package test.bta.brivesc09.service;
 
 import test.bta.brivesc09.model.UserModel;
 import test.bta.brivesc09.repository.UserDb;
+import test.bta.brivesc09.rest.SiswaDTO;
 import test.bta.brivesc09.rest.StaffDTO;
 import test.bta.brivesc09.security.SecurityConstants;
 
@@ -81,6 +82,21 @@ public class UserRestServiceImpl implements UserRestService {
         }
         // 2) username udah terdaftar + nomor pegawai udah terdaftar
         if (getUserByUsername(staff.getUsername()) != null) {
+            message += "Username telah terdaftar;";
+        }
+        return message;
+    }
+
+    @Override
+    public String checkConditions(SiswaDTO pelajar) {
+        String message="";
+        // check condition
+        // 1) password lebih dari 8 karakter
+        if (pelajar.getPassword().length() < 8) {
+            message += "Password harus terdiri atas lebih dari 8 karakter;";
+        }
+        // 2) username udah terdaftar + nomor pegawai udah terdaftar
+        if (getUserByUsername(pelajar.getUsername()) != null) {
             message += "Username telah terdaftar;";
         }
         return message;
