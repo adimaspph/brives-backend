@@ -2,15 +2,18 @@ package test.bta.brivesc09.restcontroller;
 
 import test.bta.brivesc09.repository.StaffDb;
 import test.bta.brivesc09.rest.BaseResponse;
+import test.bta.brivesc09.rest.SiswaDTO;
 import test.bta.brivesc09.rest.StaffDTO;
 import test.bta.brivesc09.model.UserModel;
 import test.bta.brivesc09.model.MapelModel;
 import test.bta.brivesc09.model.RoleModel;
+import test.bta.brivesc09.model.SiswaModel;
 import test.bta.brivesc09.model.StaffModel;
 import test.bta.brivesc09.repository.MapelDb;
 import test.bta.brivesc09.repository.RoleDb;
 import test.bta.brivesc09.repository.UserDb;
 import test.bta.brivesc09.service.MapelRestService;
+import test.bta.brivesc09.service.SiswaRestService;
 import test.bta.brivesc09.service.StaffRestService;
 import test.bta.brivesc09.service.UserRestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +47,9 @@ public class UserRestController {
     private StaffRestService staffRestService;
 
     @Autowired
+    private SiswaRestService siswaRestService;
+
+    @Autowired
     private MapelRestService mapelRestService;
 
     @Autowired
@@ -74,7 +80,6 @@ public class UserRestController {
                     response.setResult(null);
                     return response;
                 }
-                System.out.println("awal " + staff.getRole());
                 StaffModel newStaff = new StaffModel();
                 newStaff.setNoPegawai(staff.getNoPegawai());
                 newStaff.setTarif(0);
@@ -227,6 +232,62 @@ public class UserRestController {
         }
         return response;
     }
+
+    @PostMapping("/create/akun")
+    public BaseResponse<UserModel> createAkunPelajar(@Valid @RequestBody SiswaDTO siswa, BindingResult bindingResult) throws Exception {
+        BaseResponse<UserModel> response = new BaseResponse<>();
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
+        } else {
+            try {
+                String allErrorMessage = userRestService.checkConditions(siswa);
+                
+                if (!allErrorMessage.equals("")) {
+                    response.setStatus(999);
+                    response.setMessage(allErrorMessage);
+                    response.setResult(null);
+                    return response;
+                }
+                SiswaModel newSiswa = new SiswaModel();
+                newSiswa.setAsalSekolah(siswa.getAsalSekolah());
+                newSiswa = siswaRestService.createSiswa(newSiswa);
+                UserModel newUser = new UserModel();
+
+                Long uuid = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
+                newUser.setIdUser(uuid);
+                newUser.setUsername(siswa.getUsername());
+                newUser.setNamaLengkap(siswa.getNamaLengkap());
+                newUser.setEmail(siswa.getEmail());
+                newUser.setPassword(userRestService.encrypt(siswa.getPassword()));
+                newUser.setNoHP(siswa.getNoHP());
+                newUser.setSiswa(newSiswa);
+
+                RoleModel role = roleDb.findByNamaRole("PELAJAR").get();
+                newUser.setRole(role);
+                newUser.setSiswa(newSiswa);
+                
+                userRestService.createUser(newUser);
+                newSiswa.setUser(newUser);
+                newSiswa = siswaRestService.updateSiswa(newSiswa.getIdSiswa(), newSiswa);
+                response.setStatus(200);
+                response.setMessage("User berhasil terbuat");
+                response.setResult(newUser);
+                    
+            } catch (DataIntegrityViolationException e){
+                response.setStatus(400);
+                response.setMessage("Username telah terdaftar");
+                response.setResult(null);
+            } catch (Exception e) {
+                response.setStatus(500);
+                response.setMessage(e.toString());
+                response.setResult(null);
+            } 
+            return response;
+        }
+        
+    }
+        
+    
 
 
 
