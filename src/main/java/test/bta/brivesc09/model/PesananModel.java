@@ -13,6 +13,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -32,14 +33,17 @@ public class PesananModel implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate tanggal_dibuat;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime tanggal_dibuat;
 
     @NotNull
     @Column(nullable = false)
     private Integer nominal;
 
     // bukti image
+    @NotNull
+    @Column(nullable = false)
+    private String bukti;
 
     //Jadwal
     @ManyToOne
