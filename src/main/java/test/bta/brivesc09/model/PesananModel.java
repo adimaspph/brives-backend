@@ -31,15 +31,10 @@ public class PesananModel implements Serializable {
     @Column(nullable = false)
     private String materi;
 
-//    @NotNull
-//    @Column(nullable = false)
-//    @DateTimeFormat(pattern = "yyyy-MM-dd")
-//    private LocalDate tanggal_dibuat;
-
     @NotNull
     @Column(nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime jadwal_timestamp;
+    private LocalDateTime waktu_dibuat;
 
     @NotNull
     @Column(nullable = false)
