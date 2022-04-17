@@ -1,5 +1,6 @@
 package test.bta.brivesc09.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +22,7 @@ import java.util.List;
 @Setter @Getter
 @Entity
 @Table(name = "pesanan")
+//@JsonIgnoreProperties(value={"siswa"},allowSetters = true) kalau di uncomment jd infinite loop
 public class PesananModel implements Serializable {
 
     @Id
