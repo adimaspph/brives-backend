@@ -3,6 +3,7 @@ package test.bta.brivesc09.restcontroller;
 import nonapi.io.github.classgraph.json.JSONUtils;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import test.bta.brivesc09.model.MapelModel;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.StaffDTO;
 import test.bta.brivesc09.service.PesananRestServiceImpl;
@@ -55,6 +56,37 @@ public class PesananRestController {
         BaseResponse<List<PesananModel>> response = new BaseResponse<>();
         try {
             List<PesananModel> data = pesananDb.findByStatus_IdStatusPesanan(id);
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(data);
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
+
+    @GetMapping("/{id}")
+    public BaseResponse<PesananModel> getPesananById(@PathVariable Long id) {
+        BaseResponse<PesananModel> response = new BaseResponse<>();
+        try {
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(pesananDb.findByIdPesanan(id));
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
+
+    @GetMapping("/siswa/{id}")
+    public BaseResponse<List<PesananModel>> getPesananBySiswa(@PathVariable Long id) {
+        BaseResponse<List<PesananModel>> response = new BaseResponse<>();
+        try {
+            List<PesananModel> data = pesananDb.findBySiswa_IdSiswa(id);
             response.setStatus(200);
             response.setMessage("success");
             response.setResult(data);

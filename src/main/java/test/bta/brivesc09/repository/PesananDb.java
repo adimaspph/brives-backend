@@ -12,10 +12,11 @@ import java.util.Optional;
 
 @Repository
 public interface PesananDb extends JpaRepository<PesananModel, Long>{
-    PesananModel findByStatus(StatusPesananModel idStatus);
+    PesananModel findByIdPesanan(Long idPesanan);
     List<PesananModel> findAll();
 //    List<PesananModel> findByStatus_ListPesanan_IdStatus(Long idStatus);
 
     List<PesananModel> findByStatus_IdStatusPesanan(Long idStatusPesanan);
+    List<PesananModel> findBySiswa_IdSiswa(Long idSiswa);
 
 }
