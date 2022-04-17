@@ -4,15 +4,18 @@ import test.bta.brivesc09.model.MapelModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import test.bta.brivesc09.model.PesananModel;
+import test.bta.brivesc09.model.StatusPesananModel;
+import test.bta.brivesc09.model.UserModel;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface PesananDb extends JpaRepository<PesananModel, Long>{
-    PesananModel findByIdPesanan(Long idPesanan);
-//    Optional<PesananModel> findByNamaMapel(String namaMapel);
+    PesananModel findByStatus(StatusPesananModel idStatus);
     List<PesananModel> findAll();
-//    List<MapelModel> findAllByNamaMapel(String namaMapel);
-//    void deleteByIdMapel(Long idMapel);
+//    List<PesananModel> findByStatus_ListPesanan_IdStatus(Long idStatus);
+
+    List<PesananModel> findByStatus_IdStatusPesanan(Long idStatusPesanan);
+
 }

@@ -50,5 +50,21 @@ public class PesananRestController {
         return response;
     }
 
+    @GetMapping("/status/{id}")
+    public BaseResponse<List<PesananModel>> getPesananByStatus(@PathVariable Long id) {
+        BaseResponse<List<PesananModel>> response = new BaseResponse<>();
+        try {
+            List<PesananModel> data = pesananDb.findByStatus_IdStatusPesanan(id);
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(data);
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
+
 
 }
