@@ -1,5 +1,7 @@
 package test.bta.brivesc09.repository;
 
+import org.springframework.security.core.userdetails.User;
+import test.bta.brivesc09.model.PesananModel;
 import test.bta.brivesc09.model.RoleModel;
 import test.bta.brivesc09.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,4 +17,6 @@ public interface UserDb extends JpaRepository<UserModel, Long> {
     UserModel findByIdUser(Long idUser);
 
     List<UserModel> findByStaff_ListMapel_IdMapel(Long idMapel);
+    List<UserModel> findBySiswa_IdSiswa(Long idSiswa);
+
 }

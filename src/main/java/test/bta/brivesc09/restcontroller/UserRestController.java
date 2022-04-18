@@ -1,14 +1,10 @@
 package test.bta.brivesc09.restcontroller;
 
+import test.bta.brivesc09.model.*;
 import test.bta.brivesc09.repository.StaffDb;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.SiswaDTO;
 import test.bta.brivesc09.rest.StaffDTO;
-import test.bta.brivesc09.model.UserModel;
-import test.bta.brivesc09.model.MapelModel;
-import test.bta.brivesc09.model.RoleModel;
-import test.bta.brivesc09.model.SiswaModel;
-import test.bta.brivesc09.model.StaffModel;
 import test.bta.brivesc09.repository.MapelDb;
 import test.bta.brivesc09.repository.RoleDb;
 import test.bta.brivesc09.repository.UserDb;
@@ -285,6 +281,22 @@ public class UserRestController {
             return response;
         }
         
+    }
+
+    @GetMapping("/siswa/{id}")
+    public BaseResponse<List<UserModel>> getUserBySiswa(@PathVariable Long id) {
+        BaseResponse<List<UserModel>> response = new BaseResponse<>();
+        try {
+            List<UserModel> data = userDb.findBySiswa_IdSiswa(id);
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(data);
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
     }
         
     
