@@ -44,7 +44,7 @@ public class PesananModel implements Serializable {
 
     // bukti image
     @NotNull
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String bukti;
 
     //Jadwal
