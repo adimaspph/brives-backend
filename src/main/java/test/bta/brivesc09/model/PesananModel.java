@@ -36,7 +36,7 @@ public class PesananModel implements Serializable {
     @NotNull
     @Column(nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime waktu_dibuat;
+    private LocalDateTime waktuDibuat;
 
     @NotNull
     @Column(nullable = false)
