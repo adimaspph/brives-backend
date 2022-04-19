@@ -298,6 +298,22 @@ public class UserRestController {
         }
         return response;
     }
+
+    @GetMapping("/staff/{id}")
+    public BaseResponse<List<UserModel>> getUserByStaff(@PathVariable Long id) {
+        BaseResponse<List<UserModel>> response = new BaseResponse<>();
+        try {
+            List<UserModel> data = userDb.findByStaff_IdStaff(id);
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(data);
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
         
     
 

@@ -18,5 +18,6 @@ public interface UserDb extends JpaRepository<UserModel, Long> {
 
     List<UserModel> findByStaff_ListMapel_IdMapel(Long idMapel);
     List<UserModel> findBySiswa_IdSiswa(Long idSiswa);
+    List<UserModel> findByStaff_IdStaff(Long idStaff);
 
 }
