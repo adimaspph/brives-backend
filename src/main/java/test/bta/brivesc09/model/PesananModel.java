@@ -43,9 +43,8 @@ public class PesananModel implements Serializable {
     private Integer nominal;
 
     // bukti image
-    @NotNull
     @Column(nullable = true)
-    private String bukti;
+    private String buktiBayar;
 
     //Jadwal
     @ManyToOne
