@@ -25,6 +25,9 @@ public class StaffRestController {
     @Autowired
     private StaffRestService staffRestService;
 
+    @Autowired
+    private StaffDb staffDb;
+
     @GetMapping("/{id}")
     public BaseResponse<StaffModel> getStaffById(@PathVariable Long id) {
         BaseResponse<StaffModel> response = new BaseResponse<>();
@@ -40,6 +43,22 @@ public class StaffRestController {
                 response.setResult(null);
             }
 
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
+
+    @GetMapping("/jadwal/{id}")
+    public BaseResponse<List<StaffModel>> getStaffByJadwal(@PathVariable Long id) {
+        BaseResponse<List<StaffModel>> response = new BaseResponse<>();
+        try {
+            List<StaffModel> data = staffDb.findByListJadwal_IdJadwal(id);
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(data);
         } catch (Exception e) {
             response.setStatus(400);
             response.setMessage(e.toString());
