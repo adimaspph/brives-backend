@@ -58,7 +58,11 @@ public class PesananRestController {
             List<PesananModel> data = pesananDb.findByStatus_IdStatusPesanan(id);
             response.setStatus(200);
             response.setMessage("success");
-            response.setResult(data);
+            if (id == 0) {
+                response.setResult(pesananDb.findAll());
+            } else {
+                response.setResult(data);
+            }
         } catch (Exception e) {
             response.setStatus(400);
             response.setMessage(e.toString());
