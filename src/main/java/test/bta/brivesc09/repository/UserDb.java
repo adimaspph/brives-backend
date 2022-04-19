@@ -13,9 +13,7 @@ import java.util.Optional;
 @Repository
 public interface UserDb extends JpaRepository<UserModel, Long> {
     Optional<UserModel> findByUsername(String username);
-
     UserModel findByIdUser(Long idUser);
-
     List<UserModel> findByStaff_ListMapel_IdMapel(Long idMapel);
     List<UserModel> findBySiswa_IdSiswa(Long idSiswa);
     List<UserModel> findByStaff_IdStaff(Long idStaff);
