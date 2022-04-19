@@ -3,6 +3,7 @@ package test.bta.brivesc09.restcontroller;
 import nonapi.io.github.classgraph.json.JSONUtils;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
+import org.springframework.data.domain.Sort;
 import test.bta.brivesc09.model.MapelModel;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.StaffDTO;
@@ -46,7 +47,7 @@ public class PesananRestController {
         BaseResponse<List<PesananModel>> response = new BaseResponse<>();
         response.setStatus(200);
         response.setMessage("success");
-        response.setResult(pesananDb.findAll());
+        response.setResult(pesananDb.findAll(Sort.by(Sort.Direction.DESC, "waktuDibuat")));
 
         return response;
     }
