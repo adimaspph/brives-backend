@@ -60,17 +60,8 @@ public class JadwalRestServiceImpl implements JadwalRestService{
     }
 
     @Override
-    public JadwalModel getJadwalById(Long idJadwal) {
-        Optional<JadwalModel> jadwal = jadwalDb.findByIdJadwal(idJadwal);
-        if (jadwal.isPresent()) {
-            return jadwal.get();
-        }
-        return null;
-    }
-
-    @Override
     public Boolean deleteJadwalById(Long idJadwal) {
-        JadwalModel jadwal = getJadwalById(idJadwal);
+        JadwalModel jadwal = jadwalDb.findByIdJadwal(idJadwal);
 
         if (jadwal.getSiswa() != null) {
             throw new UnsupportedOperationException("Jadwal telah dibooking");
