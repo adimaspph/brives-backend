@@ -4,12 +4,10 @@ import nonapi.io.github.classgraph.json.JSONUtils;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.data.domain.Sort;
-import test.bta.brivesc09.model.MapelModel;
+import test.bta.brivesc09.model.*;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.StaffDTO;
 import test.bta.brivesc09.service.PesananRestServiceImpl;
-import test.bta.brivesc09.model.PesananModel;
-import test.bta.brivesc09.model.UserModel;
 import test.bta.brivesc09.repository.PesananDb;
 import test.bta.brivesc09.repository.UserDb;
 
@@ -70,6 +68,29 @@ public class PesananRestController {
             response.setResult(null);
         }
         return response;
+    }
+
+    @PutMapping("/status/{id}")
+    public BaseResponse<PesananModel> updateStatuspesanan(@Valid @PathVariable Long id, @RequestBody StatusPesananModel status,
+                                                 BindingResult bindingResult) throws ParseException {
+        BaseResponse<PesananModel> response = new BaseResponse<>();
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
+        } else {
+            try {
+                PesananModel newPesanan = pesananDb.findByIdPesanan(id);
+                newPesanan.setStatus(status);
+                PesananModel savedJadwal = pesananDb.save(newPesanan);
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(savedJadwal);
+            } catch (Exception e) {
+                response.setStatus(400);
+                response.setMessage(e.toString());
+                response.setResult(null);
+            }
+            return response;
+        }
     }
 
     @GetMapping("/{id}")
