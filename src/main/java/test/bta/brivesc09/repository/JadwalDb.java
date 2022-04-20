@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @Repository
 public interface JadwalDb extends JpaRepository<JadwalModel, Long>{
-    Optional<JadwalModel> findByIdJadwal(Long idJenjang);
+    JadwalModel findByIdJadwal(Long idJenjang);
     List<JadwalModel> findByTanggalAndStaff(LocalDate tanggal, StaffModel staff);
     List<JadwalModel> findAll();
     void deleteByIdJadwal(Long idMapel);
