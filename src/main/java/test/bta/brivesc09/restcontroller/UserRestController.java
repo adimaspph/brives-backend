@@ -11,6 +11,7 @@ import test.bta.brivesc09.model.SiswaModel;
 import test.bta.brivesc09.model.StaffModel;
 import test.bta.brivesc09.repository.MapelDb;
 import test.bta.brivesc09.repository.RoleDb;
+import test.bta.brivesc09.repository.SiswaDb;
 import test.bta.brivesc09.repository.UserDb;
 import test.bta.brivesc09.service.MapelRestService;
 import test.bta.brivesc09.service.SiswaRestService;
@@ -60,6 +61,9 @@ public class UserRestController {
 
     @Autowired
     private UserDb userDb;
+
+    @Autowired
+    private SiswaDb siswaDb;
 
     @Autowired
     private MapelDb mapelDb;
@@ -285,6 +289,57 @@ public class UserRestController {
             return response;
         }
         
+    }
+
+    @PostMapping("/update/{username}")
+    public BaseResponse<UserModel> updateProfilPelajar(@Valid @RequestBody SiswaDTO siswa, BindingResult bindingResult, @PathVariable String username) throws Exception {
+        BaseResponse<UserModel> response = new BaseResponse<>();
+        try {
+            UserModel user = userRestService.getUserByUsername(username);
+            SiswaModel pelajar = user.getSiswa();
+            user.setNamaLengkap(siswa.getNamaLengkap());
+            user.setNoHP(siswa.getNoHP());
+            userDb.save(user);
+            pelajar.setAsalSekolah(siswa.getAsalSekolah());
+            siswaDb.save(pelajar);
+
+            response.setStatus(200);
+            response.setMessage("Akun berhasil terubah");
+            response.setResult(user);
+        } catch (Exception e) {
+            response.setStatus(500);
+            response.setMessage("Akun tidak ditemukan");
+            response.setResult(null);
+        }
+
+        return response;
+    }
+
+    @PostMapping("/update/staf/{username}")
+    public BaseResponse<UserModel> updateProfilStaff(@Valid @RequestBody StaffDTO staff, BindingResult bindingResult, @PathVariable String username) throws Exception {
+        BaseResponse<UserModel> response = new BaseResponse<>();
+        try {
+            UserModel user = userRestService.getUserByUsername(username);
+            StaffModel staf = user.getStaff();
+            user.setNamaLengkap(staff.getNamaLengkap());
+            user.setNoHP(staff.getNoHP());
+            user.setPassword(userRestService.encrypt(staff.getPassword()));
+            userDb.save(user);
+            if (staff.getRole().equals("PENGAJAR")) {
+                staf.setTarif(staff.getTarif());
+                staffDb.save(staf);
+            }
+
+            response.setStatus(200);
+            response.setMessage("Akun berhasil terubah");
+            response.setResult(user);
+        } catch (Exception e) {
+            response.setStatus(500);
+            response.setMessage("Akun tidak ditemukan");
+            response.setResult(null);
+        }
+
+        return response;
     }
         
     
