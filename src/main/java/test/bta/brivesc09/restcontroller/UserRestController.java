@@ -286,6 +286,68 @@ public class UserRestController {
         }
         
     }
+    @PostMapping("/update/{username}")
+    public BaseResponse<UserModel> updateProfilPelajar(@Valid @RequestBody SiswaDTO siswa, BindingResult bindingResult, @PathVariable String username) throws Exception {
+        BaseResponse<UserModel> response = new BaseResponse<>();
+        try {
+            UserModel user = userRestService.getUserByUsername(username);
+            SiswaModel pelajar = user.getSiswa();
+            user.setNamaLengkap(siswa.getNamaLengkap());
+            user.setNoHP(siswa.getNoHP());
+            userDb.save(user);
+            pelajar.setAsalSekolah(siswa.getAsalSekolah());
+            siswaDb.save(pelajar);
+
+            response.setStatus(200);
+            response.setMessage("Akun berhasil terubah");
+            response.setResult(user);
+        } catch (Exception e) {
+            response.setStatus(500);
+            response.setMessage("Akun tidak ditemukan");
+            response.setResult(null);
+        }
+
+        return response;
+    }
+
+    @PostMapping("/update/staf/{username}")
+    public BaseResponse<UserModel> updateProfilStaff(@Valid @RequestBody StaffDTO staff, BindingResult bindingResult, @PathVariable String username) throws Exception {
+        BaseResponse<UserModel> response = new BaseResponse<>();
+        try {
+            UserModel user = userRestService.getUserByUsername(username);
+            StaffModel staf = user.getStaff();
+            user.setNamaLengkap(staff.getNamaLengkap());
+            user.setNoHP(staff.getNoHP());
+            user.setPassword(userRestService.encrypt(staff.getPassword()));
+            userDb.save(user);
+            staf.setNoPegawai(staff.getNoPegawai());
+            List<MapelModel> mapels = new ArrayList<>();
+            if (staff.getRole().equals("PENGAJAR")) {
+                staf.setTarif(staff.getTarif());
+                for (String mapel : staff.getListMapel()) {
+                    MapelModel mataPelajaran = mapelDb.findByNamaMapel(mapel).get();
+                    List<StaffModel> temp = mataPelajaran.getListStaff();
+                    temp.add(staf);
+                    mataPelajaran.setListStaff(temp);
+                    mapelDb.save(mataPelajaran);
+                    mapels.add(mataPelajaran);
+                }
+                staf.setListMapel(mapels);    
+            } else {
+                staf.setListMapel(mapels);
+                staf.setTarif(0);
+            }
+            staffDb.save(staf);
+            response.setStatus(200);
+            response.setMessage("Akun berhasil terubah");
+            response.setResult(user);
+        } catch (Exception e) {
+            response.setStatus(500);
+            response.setMessage("Akun tidak ditemukan");
+            response.setResult(null);
+        }
+        return response;
+    }   
 
     @GetMapping("/siswa/{id}")
     public BaseResponse<List<UserModel>> getUserBySiswa(@PathVariable Long id) {
