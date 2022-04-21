@@ -1,6 +1,9 @@
 package test.bta.brivesc09.service;
 
+import test.bta.brivesc09.model.JadwalModel;
+import test.bta.brivesc09.model.StaffModel;
 import test.bta.brivesc09.model.UserModel;
+import test.bta.brivesc09.repository.StaffDb;
 import test.bta.brivesc09.repository.UserDb;
 import test.bta.brivesc09.rest.SiswaDTO;
 import test.bta.brivesc09.rest.StaffDTO;
@@ -16,6 +19,7 @@ import javax.transaction.Transactional;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +28,9 @@ import java.util.Optional;
 public class UserRestServiceImpl implements UserRestService {
    @Autowired
    private UserDb userDb;
+
+    @Autowired
+    private StaffDb staffDb;
 
    @Override
    public UserModel createUser(UserModel user) {
@@ -46,6 +53,16 @@ public class UserRestServiceImpl implements UserRestService {
 
    @Override
    public UserModel deleteUser(UserModel user) {
+       StaffModel staff = user.getStaff();
+       staff.setListJadwal(null);
+       staff.setListMapel(null);
+       staff.setLog(null);
+
+       staffDb.delete(staff);
+
+       user.setStaff(null);
+       user.setSiswa(null);
+       user.setRole(null);
        userDb.delete(user);
 
 

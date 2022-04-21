@@ -1,5 +1,6 @@
 package test.bta.brivesc09.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 @Setter @Getter
 @Entity
 @Table(name = "status_pesanan")
+@JsonIgnoreProperties(value={"listPesanan"},allowSetters = true)
 public class StatusPesananModel implements Serializable {
 
     @Id

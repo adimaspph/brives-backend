@@ -21,7 +21,8 @@ import java.util.List;
 @Setter @Getter
 @Entity
 @Table(name = "siswa")
-@JsonIgnoreProperties(value={"user"},allowSetters = true)
+@JsonIgnoreProperties(value={"user", "listJadwal", "listPesanan"},allowSetters = true)
+// jangan uncomment list jadwal/ list pesanan agar tidak infinite loop
 public class SiswaModel implements Serializable {
 
     @Id

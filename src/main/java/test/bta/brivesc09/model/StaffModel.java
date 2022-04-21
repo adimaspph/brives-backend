@@ -27,7 +27,7 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name = "Staff")
-@JsonIgnoreProperties(value = { "user", "listJadwal", "log" }, allowSetters = true)
+@JsonIgnoreProperties(value = { "user", "log" }, allowSetters = true)
 // @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,
 // scope = StaffModel.class, property = "idStaff")
 public class StaffModel implements Serializable {
@@ -51,7 +51,7 @@ public class StaffModel implements Serializable {
 
     // @JsonManagedReference
     @OneToOne(mappedBy = "staff", orphanRemoval = true)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserModel user;
 
     // Jadwal

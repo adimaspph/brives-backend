@@ -1,14 +1,10 @@
 package test.bta.brivesc09.restcontroller;
 
+import test.bta.brivesc09.model.*;
 import test.bta.brivesc09.repository.StaffDb;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.SiswaDTO;
 import test.bta.brivesc09.rest.StaffDTO;
-import test.bta.brivesc09.model.UserModel;
-import test.bta.brivesc09.model.MapelModel;
-import test.bta.brivesc09.model.RoleModel;
-import test.bta.brivesc09.model.SiswaModel;
-import test.bta.brivesc09.model.StaffModel;
 import test.bta.brivesc09.repository.MapelDb;
 import test.bta.brivesc09.repository.RoleDb;
 import test.bta.brivesc09.repository.SiswaDb;
@@ -291,54 +287,35 @@ public class UserRestController {
         
     }
 
-    @PostMapping("/update/{username}")
-    public BaseResponse<UserModel> updateProfilPelajar(@Valid @RequestBody SiswaDTO siswa, BindingResult bindingResult, @PathVariable String username) throws Exception {
-        BaseResponse<UserModel> response = new BaseResponse<>();
+    @GetMapping("/siswa/{id}")
+    public BaseResponse<List<UserModel>> getUserBySiswa(@PathVariable Long id) {
+        BaseResponse<List<UserModel>> response = new BaseResponse<>();
         try {
-            UserModel user = userRestService.getUserByUsername(username);
-            SiswaModel pelajar = user.getSiswa();
-            user.setNamaLengkap(siswa.getNamaLengkap());
-            user.setNoHP(siswa.getNoHP());
-            userDb.save(user);
-            pelajar.setAsalSekolah(siswa.getAsalSekolah());
-            siswaDb.save(pelajar);
-
+            List<UserModel> data = userDb.findBySiswa_IdSiswa(id);
             response.setStatus(200);
-            response.setMessage("Akun berhasil terubah");
-            response.setResult(user);
+            response.setMessage("success");
+            response.setResult(data);
         } catch (Exception e) {
-            response.setStatus(500);
-            response.setMessage("Akun tidak ditemukan");
+            response.setStatus(400);
+            response.setMessage(e.toString());
             response.setResult(null);
         }
-
         return response;
     }
 
-    @PostMapping("/update/staf/{username}")
-    public BaseResponse<UserModel> updateProfilStaff(@Valid @RequestBody StaffDTO staff, BindingResult bindingResult, @PathVariable String username) throws Exception {
-        BaseResponse<UserModel> response = new BaseResponse<>();
+    @GetMapping("/staff/{id}")
+    public BaseResponse<List<UserModel>> getUserByStaff(@PathVariable Long id) {
+        BaseResponse<List<UserModel>> response = new BaseResponse<>();
         try {
-            UserModel user = userRestService.getUserByUsername(username);
-            StaffModel staf = user.getStaff();
-            user.setNamaLengkap(staff.getNamaLengkap());
-            user.setNoHP(staff.getNoHP());
-            user.setPassword(userRestService.encrypt(staff.getPassword()));
-            userDb.save(user);
-            if (staff.getRole().equals("PENGAJAR")) {
-                staf.setTarif(staff.getTarif());
-                staffDb.save(staf);
-            }
-
+            List<UserModel> data = userDb.findByStaff_IdStaff(id);
             response.setStatus(200);
-            response.setMessage("Akun berhasil terubah");
-            response.setResult(user);
+            response.setMessage("success");
+            response.setResult(data);
         } catch (Exception e) {
-            response.setStatus(500);
-            response.setMessage("Akun tidak ditemukan");
+            response.setStatus(400);
+            response.setMessage(e.toString());
             response.setResult(null);
         }
-
         return response;
     }
         

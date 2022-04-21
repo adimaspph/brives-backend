@@ -9,13 +9,14 @@ import org.springframework.web.server.ResponseStatusException;
 import test.bta.brivesc09.model.*;
 import test.bta.brivesc09.repository.JadwalDb;
 import test.bta.brivesc09.repository.MapelDb;
+import test.bta.brivesc09.repository.UserDb;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.JadwalRest;
 import test.bta.brivesc09.service.JadwalRestService;
 import test.bta.brivesc09.service.MapelRestService;
 import test.bta.brivesc09.service.StaffRestService;
 import test.bta.brivesc09.service.UserRestService;
-
+import java.text.ParseException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -38,6 +39,9 @@ public class JadwalRestController {
 
     @Autowired
     private UserRestService userRestService;
+
+    @Autowired
+    private JadwalDb jadwalDb;
 
     @GetMapping()
     public BaseResponse<List<JadwalModel>> getAllJadwalByTanggal(
@@ -99,24 +103,74 @@ public class JadwalRestController {
                 response.setResult(newJadwal);
 
             } catch (UnsupportedOperationException e) {
-//                response.setStatus(400);
-//                response.setMessage("Jadwal bertabrakan");
-//                response.setResult(null);
                 throw new ResponseStatusException(
-                        HttpStatus.NOT_ACCEPTABLE, "Jadwal bertabrakan", e);
+                        HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
 
             } catch (Exception e) {
-//                response.setStatus(500);
-//                response.setMessage(e.toString());
-//                response.setResult(null);
                 throw new ResponseStatusException(
-                        HttpStatus.BAD_REQUEST, e.toString());
+                        HttpStatus.BAD_REQUEST, e.getMessage());
             }
             return response;
         }
-
-
-
-//        return null;
     }
+
+    @DeleteMapping("/{id}")
+    public BaseResponse<JadwalModel> deleteJadwalbyId(@PathVariable Long id) {
+        BaseResponse<JadwalModel> response = new BaseResponse<>();
+        try {
+            Boolean result = jadwalRestService.deleteJadwalById(id);
+            if (result == null) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, "Gagal delete");
+            }
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(null);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage());
+        }
+        return response;
+    }
+
+    @GetMapping("/{id}")
+    public BaseResponse<JadwalModel>getJadwalById(@PathVariable Long id) {
+        BaseResponse<JadwalModel> response = new BaseResponse<>();
+        try {
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(jadwalDb.findByIdJadwal(id));
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
+
+        @PutMapping("/addLink/{id}")
+        public BaseResponse<JadwalModel> addLinkZoom(@Valid @PathVariable Long id, @RequestBody JadwalModel jadwal,
+                                                    BindingResult bindingResult) throws ParseException {
+        BaseResponse<JadwalModel> response = new BaseResponse<>();
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
+        } else {
+            try {
+                JadwalModel newJadwal = jadwalDb.findByIdJadwal(id);
+                newJadwal.setLinkZoom(jadwal.getLinkZoom());
+                JadwalModel savedJadwal = jadwalDb.save(newJadwal);
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(savedJadwal);
+            } catch (Exception e) {
+                response.setStatus(400);
+                response.setMessage(e.toString());
+                response.setResult(null);
+            }
+            return response;
+        }
+    }
+
+
 }

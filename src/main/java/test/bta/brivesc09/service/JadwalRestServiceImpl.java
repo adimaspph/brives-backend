@@ -28,6 +28,11 @@ public class JadwalRestServiceImpl implements JadwalRestService{
     public JadwalModel createJadwal(JadwalModel jadwal) {
         jadwal.setWaktuSelesai(jadwal.getWaktuMulai().plusMinutes(90));
 
+        LocalDate dateNow = LocalDate.now();
+        if (jadwal.getTanggal().isBefore(dateNow)) {
+            throw new UnsupportedOperationException("Tidak dapat membuat jadwal kemarin");
+        }
+
         List<JadwalModel> listJadwalLama = jadwalDb.findByTanggalAndStaff(jadwal.getTanggal(), jadwal.getStaff());
 
         for (JadwalModel jadwalLama : listJadwalLama) {
@@ -55,11 +60,13 @@ public class JadwalRestServiceImpl implements JadwalRestService{
     }
 
     @Override
-    public JadwalModel getJadwalById(Long idJadwal) {
-        Optional<JadwalModel> jadwal = jadwalDb.findByIdJadwal(idJadwal);
-        if (jadwal.isPresent()) {
-            return jadwal.get();
+    public Boolean deleteJadwalById(Long idJadwal) {
+        JadwalModel jadwal = jadwalDb.findByIdJadwal(idJadwal);
+
+        if (jadwal.getSiswa() != null) {
+            throw new UnsupportedOperationException("Jadwal telah dibooking");
         }
-        return null;
+        jadwalDb.deleteByIdJadwal(idJadwal);
+        return true;
     }
 }

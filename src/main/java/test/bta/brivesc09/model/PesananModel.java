@@ -1,5 +1,6 @@
 package test.bta.brivesc09.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -20,6 +22,7 @@ import java.util.List;
 @Setter @Getter
 @Entity
 @Table(name = "pesanan")
+//@JsonIgnoreProperties(value={"siswa"},allowSetters = true) kalau di uncomment jd infinite loop
 public class PesananModel implements Serializable {
 
     @Id
@@ -32,14 +35,16 @@ public class PesananModel implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate tanggal_dibuat;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime waktuDibuat;
 
     @NotNull
     @Column(nullable = false)
     private Integer nominal;
 
     // bukti image
+    @Column(nullable = true)
+    private String buktiBayar;
 
     //Jadwal
     @ManyToOne
