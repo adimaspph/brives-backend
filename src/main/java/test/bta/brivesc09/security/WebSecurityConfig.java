@@ -43,7 +43,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
     CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
-    corsConfiguration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://brives-staging.herokuapp.com" ,"https://brives-staging.herokuapp.com"));
+    corsConfiguration.setAllowedOrigins(Arrays.asList(
+            "http://localhost:3000",
+            "http://brives-staging.herokuapp.com" ,
+            "https://brives-staging.herokuapp.com",
+            "http://dev.bta8jakarta.com",
+            "https://dev.bta8jakarta.com"));
     corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
     corsConfiguration.addAllowedMethod(HttpMethod.DELETE);
     corsConfiguration.addAllowedMethod(HttpMethod.PUT);

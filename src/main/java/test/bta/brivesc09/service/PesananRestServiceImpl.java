@@ -2,6 +2,7 @@ package test.bta.brivesc09.service;
 
 import test.bta.brivesc09.model.JadwalModel;
 import test.bta.brivesc09.model.MapelModel;
+import test.bta.brivesc09.model.PesananModel;
 import test.bta.brivesc09.repository.MapelDb;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,11 @@ import java.util.Optional;
 public class PesananRestServiceImpl implements PesananRestService {
     @Autowired
     private PesananDb pesananDb;
+
+    @Override
+    public PesananModel createPesanan(PesananModel pesanan) {
+        return pesananDb.save(pesanan);
+    }
 
 //    @Override
 //    public MapelModel createMapel(MapelModel mapel) {

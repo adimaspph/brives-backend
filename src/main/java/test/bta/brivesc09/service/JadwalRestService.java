@@ -11,6 +11,7 @@ public interface JadwalRestService {
     List<JadwalModel> getAllJadwal();
     JadwalModel createJadwal(JadwalModel jadwal);
     List<JadwalModel> getListJadwalByTanggal(LocalDate tanggal, StaffModel staff);
-//    JadwalModel getJadwalById(Long idJadwal);
+    JadwalModel getJadwalById(Long idJadwal);
     Boolean deleteJadwalById(Long idJadwal);
+    List<JadwalModel> getAllJadwalByIdMapel(Long idMapel, LocalDate tanggal);
 }

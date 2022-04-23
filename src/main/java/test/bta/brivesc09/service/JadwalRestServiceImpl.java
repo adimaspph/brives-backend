@@ -19,6 +19,9 @@ public class JadwalRestServiceImpl implements JadwalRestService{
     @Autowired
     private JadwalDb jadwalDb;
 
+    @Autowired
+    private MapelRestService mapelRestService;
+
     @Override
     public List<JadwalModel> getAllJadwal() {
         return jadwalDb.findAll();
@@ -60,6 +63,11 @@ public class JadwalRestServiceImpl implements JadwalRestService{
     }
 
     @Override
+    public JadwalModel getJadwalById(Long idJadwal) {
+        return jadwalDb.findByIdJadwal(idJadwal);
+    }
+
+    @Override
     public Boolean deleteJadwalById(Long idJadwal) {
         JadwalModel jadwal = jadwalDb.findByIdJadwal(idJadwal);
 
@@ -68,5 +76,10 @@ public class JadwalRestServiceImpl implements JadwalRestService{
         }
         jadwalDb.deleteByIdJadwal(idJadwal);
         return true;
+    }
+
+    @Override
+    public List<JadwalModel> getAllJadwalByIdMapel(Long idMapel, LocalDate tanggal) {
+        return jadwalDb.findByTanggalAndMapel(tanggal, mapelRestService.getMapelById(idMapel));
     }
 }

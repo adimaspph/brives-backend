@@ -49,14 +49,14 @@ public class JadwalRestController {
             @RequestParam Integer tanggal,
             @RequestParam Integer bulan,
             @RequestParam Integer tahun
-        ) {
+    ) {
         BaseResponse<List<JadwalModel>> response = new BaseResponse<>();
         if (tanggal == null || bulan == null || tahun == null) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
             );
         } else {
-            try{
+            try {
                 UserModel authUser = userRestService.getUserFromJwt(request);
                 response.setResult(jadwalRestService.getListJadwalByTanggal(LocalDate.of(tahun, bulan, tanggal), authUser.getStaff()));
 
@@ -74,7 +74,7 @@ public class JadwalRestController {
 
     // Create jadwal
     @PostMapping()
-    public BaseResponse<JadwalModel> createJadwal (
+    public BaseResponse<JadwalModel> createJadwal(
             HttpServletRequest request,
             @Valid @RequestBody JadwalRest jadwalRest,
             BindingResult bindingResult
@@ -86,7 +86,7 @@ public class JadwalRestController {
                     HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
             );
         } else {
-            try{
+            try {
                 LocalTime start = LocalTime.of(jadwalRest.jam, jadwalRest.menit);
                 JadwalModel jadwal = new JadwalModel();
                 jadwal.setTanggal(LocalDate.of(jadwalRest.tahun, jadwalRest.bulan, jadwalRest.tanggal));
@@ -135,7 +135,7 @@ public class JadwalRestController {
     }
 
     @GetMapping("/{id}")
-    public BaseResponse<JadwalModel>getJadwalById(@PathVariable Long id) {
+    public BaseResponse<JadwalModel> getJadwalById(@PathVariable Long id) {
         BaseResponse<JadwalModel> response = new BaseResponse<>();
         try {
             response.setStatus(200);
@@ -149,9 +149,9 @@ public class JadwalRestController {
         return response;
     }
 
-        @PutMapping("/addLink/{id}")
-        public BaseResponse<JadwalModel> addLinkZoom(@Valid @PathVariable Long id, @RequestBody JadwalModel jadwal,
-                                                    BindingResult bindingResult) throws ParseException {
+    @PutMapping("/addLink/{id}")
+    public BaseResponse<JadwalModel> addLinkZoom(@Valid @PathVariable Long id, @RequestBody JadwalModel jadwal,
+                                                 BindingResult bindingResult) throws ParseException {
         BaseResponse<JadwalModel> response = new BaseResponse<>();
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
@@ -172,5 +172,31 @@ public class JadwalRestController {
         }
     }
 
+    @GetMapping("/mapel/")
+    public BaseResponse<List<JadwalModel>> getJadwalByMapelAndDate(
+            @RequestParam Integer tanggal,
+            @RequestParam Integer bulan,
+            @RequestParam Integer tahun,
+            @RequestParam Long idMapel
+    ) {
+        BaseResponse<List<JadwalModel>> response = new BaseResponse<>();
+        if (tanggal == null || bulan == null || tahun == null || idMapel == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
+            );
+        }
+        else {
+            try {
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(jadwalRestService.getAllJadwalByIdMapel(idMapel, LocalDate.of(tahun, bulan, tanggal)));
+            } catch (Exception e) {
+                response.setStatus(400);
+                response.setMessage(e.toString());
+                response.setResult(null);
+            }
+            return response;
+        }
+    }
 
 }
