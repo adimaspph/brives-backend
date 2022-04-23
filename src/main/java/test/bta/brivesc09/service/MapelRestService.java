@@ -11,4 +11,5 @@ public interface MapelRestService {
 //    void deleteStaff(Long idStaff);
     MapelModel deleteByIdMapel(Long idMapel);
     MapelModel getMapelById(Long id);
+    List<MapelModel> getAllMapelByIdJenang(Long idJenjang);
 }

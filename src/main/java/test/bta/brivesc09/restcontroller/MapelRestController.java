@@ -172,4 +172,20 @@ public class MapelRestController {
         }
         return response;
     }
+
+    @GetMapping("/jenjang/{idJenjang}")
+    public BaseResponse<List<MapelModel>> getMapelByJenjang(@PathVariable Long idJenjang) {
+        BaseResponse<List<MapelModel>> response = new BaseResponse<>();
+        try {
+            List<MapelModel> data = mapelService.getAllMapelByIdJenang(idJenjang);
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(data);
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
 }
