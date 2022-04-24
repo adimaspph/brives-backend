@@ -241,7 +241,6 @@ public class UserRestController {
         } else {
             try {
                 String allErrorMessage = userRestService.checkConditions(siswa);
-                
                 if (!allErrorMessage.equals("")) {
                     response.setStatus(999);
                     response.setMessage(allErrorMessage);

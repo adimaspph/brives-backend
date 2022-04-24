@@ -95,11 +95,45 @@ public class UserRestServiceImpl implements UserRestService {
         // check condition
         // 1) password lebih dari 8 karakter
         if (staff.getPassword().length() < 8) {
-            message += "Password harus terdiri atas lebih dari 8 karakter;";
+            message += "Password harus terdiri atas lebih dari 8 karakter";
         }
+        
+        char[] alphabet = staff.getPassword().toCharArray();
+        boolean hasCapital = false;
+        boolean hasDigit = false;
+        boolean hasLetter = false;
+
+        for (char c : alphabet) {
+            if (Character.isDigit(c)) {
+                hasDigit = true;
+            }
+            if (Character.isUpperCase(c)) {
+                hasCapital = true;
+            }
+            if (Character.isLetter(c)) {
+                hasLetter = true;
+            }
+        }
+
+        if (!hasCapital) {
+            message += ", memiliki setidaknya 1 kapital";
+        }
+
+        if (!hasDigit) {
+            message += ", memiliki setidaknya 1 angka";
+        }
+
+        if (!hasLetter) {
+            message += ", memiliki setidaknya 1 huruf";
+        }
+
+        
         // 2) username udah terdaftar + nomor pegawai udah terdaftar
         if (getUserByUsername(staff.getUsername()) != null) {
-            message += "Username telah terdaftar;";
+            if (message!="") {
+                message += " dan ";
+            }
+            message += "Username telah terdaftar";
         }
         return message;
     }
@@ -110,12 +144,47 @@ public class UserRestServiceImpl implements UserRestService {
         // check condition
         // 1) password lebih dari 8 karakter
         if (pelajar.getPassword().length() < 8) {
-            message += "Password harus terdiri atas lebih dari 8 karakter;";
+            message += "Password harus terdiri atas lebih dari 8 karakter";
         }
+        
+        char[] alphabet = pelajar.getPassword().toCharArray();
+        boolean hasCapital = false;
+        boolean hasDigit = false;
+        boolean hasLetter = false;
+
+        for (char c : alphabet) {
+            if (Character.isDigit(c)) {
+                hasDigit = true;
+            }
+            if (Character.isUpperCase(c)) {
+                hasCapital = true;
+            }
+            if (Character.isLetter(c)) {
+                hasLetter = true;
+            }
+        }
+
+        if (!hasCapital) {
+            message += ", memiliki setidaknya 1 kapital";
+        }
+
+        if (!hasDigit) {
+            message += ", memiliki setidaknya 1 angka";
+        }
+
+        if (!hasLetter) {
+            message += ", memiliki setidaknya 1 huruf";
+        }
+
+        
         // 2) username udah terdaftar + nomor pegawai udah terdaftar
         if (getUserByUsername(pelajar.getUsername()) != null) {
-            message += "Username telah terdaftar;";
+            if (message!="") {
+                message += " dan ";
+            }
+            message += "Username telah terdaftar";
         }
         return message;
+    
     }
 }
