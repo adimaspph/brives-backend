@@ -94,15 +94,17 @@ public class UserRestServiceImpl implements UserRestService {
         String message="";
         // check condition
         // 1) password lebih dari 8 karakter
-        if (staff.getPassword().length() < 8) {
-            message += "Password harus terdiri atas lebih dari 8 karakter";
-        }
-        
         char[] alphabet = staff.getPassword().toCharArray();
         boolean hasCapital = false;
         boolean hasDigit = false;
         boolean hasLetter = false;
+        boolean hasMoreThanEight = false;
 
+        if (staff.getPassword().length() >= 8) {
+            hasMoreThanEight = true;
+        }
+        
+        
         for (char c : alphabet) {
             if (Character.isDigit(c)) {
                 hasDigit = true;
@@ -115,20 +117,26 @@ public class UserRestServiceImpl implements UserRestService {
             }
         }
 
-        if (!hasCapital) {
-            message += ", memiliki setidaknya 1 kapital";
+        if (!(hasMoreThanEight && hasDigit && hasCapital && hasLetter)) {
+            message += "Password harus";
+            if (hasMoreThanEight) {
+                message += ", terdiri atas lebih dari 8 karakter";
+            }
+    
+            if (!hasCapital) {
+                message += ", memiliki setidaknya 1 kapital";
+            }
+    
+            if (!hasDigit) {
+                message += ", memiliki setidaknya 1 angka";
+            }
+    
+            if (!hasLetter) {
+                message += ", memiliki setidaknya 1 huruf";
+            }
         }
-
-        if (!hasDigit) {
-            message += ", memiliki setidaknya 1 angka";
-        }
-
-        if (!hasLetter) {
-            message += ", memiliki setidaknya 1 huruf";
-        }
-
         
-        // 2) username udah terdaftar + nomor pegawai udah terdaftar
+        // 2) username udah terdaftar udah terdaftar
         if (getUserByUsername(staff.getUsername()) != null) {
             if (message!="") {
                 message += " dan ";
@@ -136,6 +144,7 @@ public class UserRestServiceImpl implements UserRestService {
             message += "Username telah terdaftar";
         }
         return message;
+    
     }
 
     @Override
@@ -143,15 +152,17 @@ public class UserRestServiceImpl implements UserRestService {
         String message="";
         // check condition
         // 1) password lebih dari 8 karakter
-        if (pelajar.getPassword().length() < 8) {
-            message += "Password harus terdiri atas lebih dari 8 karakter";
-        }
-        
         char[] alphabet = pelajar.getPassword().toCharArray();
         boolean hasCapital = false;
         boolean hasDigit = false;
         boolean hasLetter = false;
+        boolean hasMoreThanEight = false;
 
+        if (pelajar.getPassword().length() >= 8) {
+            hasMoreThanEight = true;
+        }
+        
+        
         for (char c : alphabet) {
             if (Character.isDigit(c)) {
                 hasDigit = true;
@@ -164,20 +175,26 @@ public class UserRestServiceImpl implements UserRestService {
             }
         }
 
-        if (!hasCapital) {
-            message += ", memiliki setidaknya 1 kapital";
+        if (!(hasMoreThanEight && hasDigit && hasCapital && hasLetter)) {
+            message += "Password harus";
+            if (hasMoreThanEight) {
+                message += ", terdiri atas lebih dari 8 karakter";
+            }
+    
+            if (!hasCapital) {
+                message += ", memiliki setidaknya 1 kapital";
+            }
+    
+            if (!hasDigit) {
+                message += ", memiliki setidaknya 1 angka";
+            }
+    
+            if (!hasLetter) {
+                message += ", memiliki setidaknya 1 huruf";
+            }
         }
-
-        if (!hasDigit) {
-            message += ", memiliki setidaknya 1 angka";
-        }
-
-        if (!hasLetter) {
-            message += ", memiliki setidaknya 1 huruf";
-        }
-
         
-        // 2) username udah terdaftar + nomor pegawai udah terdaftar
+        // 2) username udah terdaftar udah terdaftar
         if (getUserByUsername(pelajar.getUsername()) != null) {
             if (message!="") {
                 message += " dan ";
