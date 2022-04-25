@@ -323,15 +323,20 @@ public class UserRestController {
             staf.setNoPegawai(staff.getNoPegawai());
             
             List<MapelModel> mapels = new ArrayList<>();
+            staf.setListMapel(mapels);
+            staffDb.save(staf);
+
             if (staff.getRole().equals("PENGAJAR")) {
                 staf.setTarif(staff.getTarif());
                 for (String mapel : staff.getListMapel()) {
                     MapelModel mataPelajaran = mapelDb.findByNamaMapel(mapel).get();
-                    List<StaffModel> temp = mataPelajaran.getListStaff();
-                    temp.add(staf);
-                    mataPelajaran.setListStaff(temp);
-                    mapelDb.save(mataPelajaran);
-                    mapels.add(mataPelajaran);
+                    List<StaffModel> tempo = mataPelajaran.getListStaff();
+                    if (!tempo.contains(staf)) {
+                        tempo.add(staf);
+                        mataPelajaran.setListStaff(tempo);
+                        mapelDb.save(mataPelajaran);
+                        mapels.add(mataPelajaran);
+                    }
                 }
                 staf.setListMapel(mapels);    
             } else {
