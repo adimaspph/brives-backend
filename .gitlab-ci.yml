@@ -4,7 +4,7 @@ stages:
    - deploy-to-digitalocean
 
 maven-build:
-  image: maven:3-jdk-8
+  image: maven:latest
   stage: build
   script: "mvn package -B"
   artifacts:
