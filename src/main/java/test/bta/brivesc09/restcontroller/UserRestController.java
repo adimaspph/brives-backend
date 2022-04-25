@@ -317,7 +317,6 @@ public class UserRestController {
             StaffModel staf = user.getStaff();
             user.setNamaLengkap(staff.getNamaLengkap());
             user.setNoHP(staff.getNoHP());
-            user.setPassword(userRestService.encrypt(staff.getPassword()));
             userDb.save(user);
             staf.setNoPegawai(staff.getNoPegawai());
             List<MapelModel> mapels = new ArrayList<>();
@@ -380,10 +379,6 @@ public class UserRestController {
         return response;
     }
         
-    
-
-
-
 }
 
 
