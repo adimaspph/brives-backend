@@ -296,7 +296,6 @@ public class UserRestController {
             userDb.save(user);
             pelajar.setAsalSekolah(siswa.getAsalSekolah());
             siswaDb.save(pelajar);
-
             response.setStatus(200);
             response.setMessage("Akun berhasil terubah");
             response.setResult(user);
@@ -317,9 +316,12 @@ public class UserRestController {
             StaffModel staf = user.getStaff();
             user.setNamaLengkap(staff.getNamaLengkap());
             user.setNoHP(staff.getNoHP());
-            user.setPassword(userRestService.encrypt(staff.getPassword()));
+
+            RoleModel role = roleDb.findByNamaRole(staff.getRole()).get();
+            user.setRole(role);
             userDb.save(user);
             staf.setNoPegawai(staff.getNoPegawai());
+            
             List<MapelModel> mapels = new ArrayList<>();
             if (staff.getRole().equals("PENGAJAR")) {
                 staf.setTarif(staff.getTarif());
@@ -380,10 +382,6 @@ public class UserRestController {
         return response;
     }
         
-    
-
-
-
 }
 
 
