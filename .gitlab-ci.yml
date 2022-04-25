@@ -1,6 +1,15 @@
 stages:
    - build
    - deploy
+   - deploy-to-digitalocean
+
+maven-build:
+  image: maven:3-jdk-8
+  stage: build
+  script: "mvn package -B"
+  artifacts:
+    paths:
+      - target/*.jar
 
 deploy-heroku-staging:
  stage: deploy
@@ -16,4 +25,14 @@ deploy-heroku-staging:
     name: staging
     url: $HEROKU_APP_HOST_STAGING
  only:
+    - staging
+
+deploy-digitalocean:
+  stage: deploy-to-digitalocean
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - scp -i $DIGITALOCEAN_PRIVATE_KEY target/*.jar root@157.245.63.146:/deploy
+  only:
     - staging

@@ -15,8 +15,8 @@
 	<description>TEs</description>
 	<properties>
 		<java.version>11</java.version>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
+<!--		<maven.compiler.source>11</maven.compiler.source>-->
+<!--		<maven.compiler.target>11</maven.compiler.target>-->
 	</properties>
 	<dependencies>
 		<dependency>
@@ -67,6 +67,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -116,7 +120,7 @@
 		</dependency>
 
     </dependencies>
-
+	<packaging>jar</packaging>
 	<build>
 		<plugins>
 			<plugin>
@@ -129,6 +133,19 @@
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<!-- Build an executable JAR -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.1.0</version>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>test.bta.brivesc09.Brivesc09Application</mainClass>
+						</manifest>
+					</archive>
 				</configuration>
 			</plugin>
 		</plugins>
