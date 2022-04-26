@@ -321,10 +321,21 @@ public class UserRestController {
             user.setRole(role);
             userDb.save(user);
             staf.setNoPegawai(staff.getNoPegawai());
-            
-            List<MapelModel> mapels = new ArrayList<>();
-            staf.setListMapel(mapels);
             staffDb.save(staf);
+            List<MapelModel> mapels = staf.getListMapel(); // jgn dari arraylist 
+
+            for (MapelModel mapel : mapels) {
+                String namaMapelString = mapel.getNamaMapel();
+                if (!staff.getListMapel().contains(namaMapelString)) {
+                    mapels.remove(mapel);
+                    staf.setListMapel(mapels);
+                    staffDb.save(staf);
+                    List<StaffModel> paraPengajar = mapel.getListStaff();
+                    paraPengajar.remove(staf);
+                    mapel.setListStaff(paraPengajar);
+                    mapelDb.save(mapel);
+                }
+            }
 
             if (staff.getRole().equals("PENGAJAR")) {
                 staf.setTarif(staff.getTarif());
@@ -336,9 +347,10 @@ public class UserRestController {
                         mataPelajaran.setListStaff(tempo);
                         mapelDb.save(mataPelajaran);
                         mapels.add(mataPelajaran);
+                        staf.setListMapel(mapels); 
                     }
                 }
-                staf.setListMapel(mapels);    
+                   
             } else {
                 staf.setListMapel(mapels);
                 staf.setTarif(0);
