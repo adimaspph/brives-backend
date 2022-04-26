@@ -5,7 +5,7 @@ stages:
 
 deploy-heroku-staging:
   stage: deploy
-  image: ruby:2.6
+  image: ruby:latest
   before_script:
     - gem install dpl --version 1.10.15
     - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
