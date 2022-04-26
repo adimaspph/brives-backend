@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @SpringBootApplication
-public class Brivesc09Application {
+public class Brivesc09Application extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 //		new SpringApplicationBuilder(Brivesc09Application.class)
