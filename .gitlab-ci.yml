@@ -22,7 +22,7 @@ deploy-heroku-staging:
 maven-build:
   image: maven:latest
   stage: build
-  script: "mvn package -B"
+  script: "mvn clean install -Dmaven.test.skip=true"
   artifacts:
     paths:
       - target/*.jar
