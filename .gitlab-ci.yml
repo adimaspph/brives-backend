@@ -1,7 +1,7 @@
 stages:
    - build
    - deploy
-   - deploy-to-digitalocean
+   - deploy-digitalocean
 
 deploy-heroku-staging:
   stage: deploy
