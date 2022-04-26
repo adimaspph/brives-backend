@@ -27,14 +27,14 @@ maven-build:
     paths:
       - target/*.jar
   only:
-    - staging
+    - adimas
 
 deploy-digitalocean:
-  stage: deploy-to-digitalocean
-  image: docker:latest
-  services:
-    - docker:dind
+  stage: deploy-digitalocean
+  image: kroniak/ssh-client
+  before_script:
+    - echo "deploying app"
   script:
     - scp -i $DIGITALOCEAN_PRIVATE_KEY target/*.jar root@157.245.63.146:/deploy
   only:
-    - staging
+    - adimas
