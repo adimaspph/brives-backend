@@ -352,7 +352,8 @@ public class UserRestController {
                 }
                    
             } else {
-                staf.setListMapel(mapels);
+                List<MapelModel> empty = new ArrayList<>();
+                staf.setListMapel(empty);
                 staf.setTarif(0);
             }
             staffDb.save(staf);
