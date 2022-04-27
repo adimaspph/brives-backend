@@ -12,6 +12,7 @@ import test.bta.brivesc09.repository.MapelDb;
 import test.bta.brivesc09.repository.UserDb;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.JadwalRest;
+import test.bta.brivesc09.rest.PesanJadwalModelRest;
 import test.bta.brivesc09.service.JadwalRestService;
 import test.bta.brivesc09.service.MapelRestService;
 import test.bta.brivesc09.service.StaffRestService;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "https://brives-staging.herokuapp.com")
@@ -172,14 +174,14 @@ public class JadwalRestController {
         }
     }
 
-    @GetMapping("/mapel/")
-    public BaseResponse<List<JadwalModel>> getJadwalByMapelAndDate(
+    @GetMapping("/mapel")
+    public BaseResponse<List<PesanJadwalModelRest>> getJadwalByMapelAndDate(
             @RequestParam Integer tanggal,
             @RequestParam Integer bulan,
             @RequestParam Integer tahun,
             @RequestParam Long idMapel
     ) {
-        BaseResponse<List<JadwalModel>> response = new BaseResponse<>();
+        BaseResponse<List<PesanJadwalModelRest>> response = new BaseResponse<>();
         if (tanggal == null || bulan == null || tahun == null || idMapel == null) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
@@ -187,9 +189,19 @@ public class JadwalRestController {
         }
         else {
             try {
+                List<PesanJadwalModelRest> result = new ArrayList<>();
+                List<JadwalModel> listJadwal = jadwalRestService.getAllJadwalByIdMapel(idMapel, LocalDate.of(tahun, bulan, tanggal));
+                for (JadwalModel jadwal : listJadwal) {
+                    PesanJadwalModelRest temp = new PesanJadwalModelRest();
+                    temp.jadwal = jadwal;
+                    temp.nama = jadwal.getStaff().getUser().getNamaLengkap();
+                    temp.tarif = jadwal.getStaff().getTarif();
+                    temp.username = jadwal.getStaff().getUser().getUsername();
+                    result.add(temp);
+                }
                 response.setStatus(200);
                 response.setMessage("success");
-                response.setResult(jadwalRestService.getAllJadwalByIdMapel(idMapel, LocalDate.of(tahun, bulan, tanggal)));
+                response.setResult(result);
             } catch (Exception e) {
                 response.setStatus(400);
                 response.setMessage(e.toString());
@@ -199,4 +211,23 @@ public class JadwalRestController {
         }
     }
 
+//    @GetMapping("/pengajar/{id}")
+//    public BaseResponse<PesanJadwalModelRest> getStaffByIdJadwal(@PathVariable Long id) {
+//        BaseResponse<PesanJadwalModelRest> response = new BaseResponse<>();
+//        try {
+//            JadwalModel jadwal = jadwalRestService.getJadwalById(id);
+//            PesanJadwalModelRest result = new PesanJadwalModelRest();
+//            result.tarif = jadwal.getStaff().getTarif();
+//            result.nama = jadwal.getStaff().getUser().getNamaLengkap();
+//            result.username = jadwal.getStaff().getUser().getUsername();
+//            response.setStatus(200);
+//            response.setMessage("success");
+//            response.setResult(result);
+//        } catch (Exception e) {
+//            response.setStatus(400);
+//            response.setMessage(e.toString());
+//            response.setResult(null);
+//        }
+//        return response;
+//    }
 }
