@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -91,7 +92,7 @@ public class PesananRestController {
 
     @PutMapping("/status/{id}")
     public BaseResponse<PesananModel> updateStatuspesanan(@Valid @PathVariable Long id, @RequestBody StatusPesananModel status,
-                                                 BindingResult bindingResult) throws ParseException {
+                                                          BindingResult bindingResult) throws ParseException {
         BaseResponse<PesananModel> response = new BaseResponse<>();
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
@@ -142,6 +143,36 @@ public class PesananRestController {
         }
         return response;
     }
+
+    @GetMapping("/siswa/{idSiswa}/status/{idStatus}")
+    public BaseResponse<List<PesananModel>> getPesananByStatusSiswa(@PathVariable Long idSiswa, @PathVariable Long idStatus) {
+        BaseResponse<List<PesananModel>> response = new BaseResponse<>();
+        try {
+            List<PesananModel> datasiswa = pesananDb.findBySiswa_IdSiswa(idSiswa);
+            ArrayList<PesananModel> pesanan = new ArrayList<PesananModel>();
+            for (PesananModel x : datasiswa) {
+                if (x.getStatus().getIdStatusPesanan().equals(idStatus)) {
+                    pesanan.add(x);
+                }
+            }
+            response.setStatus(200);
+            response.setMessage("success");
+
+            if (idStatus == 0) {
+                response.setResult(pesananDb.findBySiswa_IdSiswa(idSiswa));
+            } else {
+                response.setResult(pesanan);
+            }
+
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        
+        return response;
+    }
+
 
     @PostMapping()
     public BaseResponse<PesananModel> createJadwal(
