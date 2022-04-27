@@ -5,6 +5,7 @@ import java.util.List;
 
 public interface PesananRestService {
     PesananModel createPesanan(PesananModel pesanan);
+    PesananModel getPesananById(Long id);
 //    PesananModel deleteByIdMapel(Long idMapel);
 //    PesananModel getMapelById(Long id);
 }

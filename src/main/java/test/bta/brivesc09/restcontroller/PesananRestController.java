@@ -89,8 +89,9 @@ public class PesananRestController {
     }
 
     @PutMapping("/status/{id}")
-    public BaseResponse<PesananModel> updateStatuspesanan(@Valid @PathVariable Long id, @RequestBody StatusPesananModel status,
-                                                 BindingResult bindingResult) throws ParseException {
+    public BaseResponse<PesananModel> updateStatuspesanan(@Valid @PathVariable Long id,
+            @RequestBody StatusPesananModel status,
+            BindingResult bindingResult) throws ParseException {
         BaseResponse<PesananModel> response = new BaseResponse<>();
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
@@ -146,14 +147,12 @@ public class PesananRestController {
     public BaseResponse<PesananModel> createJadwal(
             HttpServletRequest request,
             @Valid @RequestBody PesananRest pesananRest,
-            BindingResult bindingResult
-    ) {
+            BindingResult bindingResult) {
         BaseResponse<PesananModel> response = new BaseResponse<>();
 
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
-            );
+                    HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field");
         } else {
             try {
                 PesananModel pesanan = new PesananModel();
@@ -174,6 +173,27 @@ public class PesananRestController {
             }
             return response;
         }
+    }
+
+    @PostMapping("/bayar/{id}")
+    public BaseResponse<PesananModel> addPembayaran(@PathVariable Long id, @RequestParam String bukti) {
+        BaseResponse<PesananModel> response = new BaseResponse<>();
+        try {
+            PesananModel pesanan = pesananDb.getById(id);
+            pesanan.setBuktiBayar(bukti);
+            StatusPesananModel status = pesanan.getStatus();
+            status.setJenisStatus("Menunggu verifikasi");
+
+            pesananDb.save(pesanan);
+
+            response.setResult(pesanan);
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.toString());
+        }
+        return response;
+
     }
 
 }
