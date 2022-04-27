@@ -36,7 +36,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-@CrossOrigin(origins = "https://brives-staging.herokuapp.com")
+@CrossOrigin()
 
 @RestController
 @RequestMapping("pesanan")
