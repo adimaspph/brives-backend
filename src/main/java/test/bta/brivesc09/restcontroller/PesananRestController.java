@@ -11,6 +11,7 @@ import test.bta.brivesc09.rest.JadwalRest;
 import test.bta.brivesc09.rest.PesananRest;
 import test.bta.brivesc09.rest.StaffDTO;
 import test.bta.brivesc09.service.JadwalRestService;
+import test.bta.brivesc09.service.PesananRestService;
 import test.bta.brivesc09.service.PesananRestServiceImpl;
 import test.bta.brivesc09.repository.PesananDb;
 import test.bta.brivesc09.repository.UserDb;
@@ -56,7 +57,7 @@ public class PesananRestController {
     private UserRestService userRestService;
 
     @Autowired
-    private PesananRestServiceImpl pesananService;
+    private PesananRestService pesananRestService;
 
     @GetMapping("/")
     public BaseResponse<List<PesananModel>> getAllPesanan() {
@@ -90,7 +91,7 @@ public class PesananRestController {
 
     @PutMapping("/status/{id}")
     public BaseResponse<PesananModel> updateStatuspesanan(@Valid @PathVariable Long id, @RequestBody StatusPesananModel status,
-                                                 BindingResult bindingResult) throws ParseException {
+                                                          BindingResult bindingResult) throws ParseException {
         BaseResponse<PesananModel> response = new BaseResponse<>();
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
@@ -166,6 +167,7 @@ public class PesananRestController {
                 pesanan.setJadwal(jadwalRestService.getJadwalById(pesananRest.idJadwal));
                 pesanan.setSiswa(authUser.getSiswa());
 
+                pesananRestService.createPesanan(pesanan);
                 response.setResult(pesanan);
 
             } catch (Exception e) {
