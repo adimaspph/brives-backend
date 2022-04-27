@@ -118,8 +118,8 @@ public class UserRestServiceImpl implements UserRestService {
         }
 
         if (!(hasMoreThanEight && hasDigit && hasCapital && hasLetter)) {
-            message += "Password harus";
-            if (hasMoreThanEight) {
+            message += "Password seharusnya";
+            if (!hasMoreThanEight) {
                 message += ", terdiri atas lebih dari 8 karakter";
             }
     
@@ -176,8 +176,8 @@ public class UserRestServiceImpl implements UserRestService {
         }
 
         if (!(hasMoreThanEight && hasDigit && hasCapital && hasLetter)) {
-            message += "Password harus";
-            if (hasMoreThanEight) {
+            message += "Password seharusnya";
+            if (!hasMoreThanEight) {
                 message += ", terdiri atas lebih dari 8 karakter";
             }
     
