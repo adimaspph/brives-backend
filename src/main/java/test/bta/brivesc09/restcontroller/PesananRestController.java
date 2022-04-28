@@ -229,4 +229,27 @@ public class PesananRestController {
 
     }
 
+    @PutMapping("/addAlasan/{id}")
+    public BaseResponse<PesananModel> addAlasanPenolakan(@Valid @PathVariable Long id, @RequestBody PesananModel pesanan,
+                                                 BindingResult bindingResult) throws ParseException {
+        BaseResponse<PesananModel> response = new BaseResponse<>();
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
+        } else {
+            try {
+                PesananModel newPesanan = pesananDb.findByIdPesanan(id);
+                newPesanan.setAlasan(pesanan.getAlasan());
+                PesananModel savedPesanan = pesananDb.save(newPesanan);
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(savedPesanan);
+            } catch (Exception e) {
+                response.setStatus(400);
+                response.setMessage(e.toString());
+                response.setResult(null);
+            }
+            return response;
+        }
+    }
+
 }
