@@ -169,7 +169,7 @@ public class PesananRestController {
             response.setMessage(e.toString());
             response.setResult(null);
         }
-        
+
         return response;
     }
 
@@ -214,7 +214,8 @@ public class PesananRestController {
             PesananModel pesanan = pesananDb.getById(id);
             pesanan.setBuktiBayar(bukti);
             StatusPesananModel status = pesanan.getStatus();
-            status.setJenisStatus("Menunggu verifikasi");
+            status.setIdStatusPesanan(2L);
+            status.setJenisStatus("Menunggu Verifikasi");
 
             pesananDb.save(pesanan);
 
