@@ -208,17 +208,17 @@ public class PesananRestController {
     }
 
     @PostMapping("/bayar/{id}")
-    public BaseResponse<PesananModel> addPembayaran(@PathVariable Long id, @RequestParam String bukti) {
+    public BaseResponse<PesananModel> addPembayaran(@PathVariable Long id, @RequestParam PesananModel pesanan) {
         BaseResponse<PesananModel> response = new BaseResponse<>();
         try {
-            PesananModel pesanan = pesananDb.getById(id);
-            pesanan.setBuktiBayar(bukti);
-            StatusPesananModel status = pesanan.getStatus();
-            status.setIdStatusPesanan(2L);
-            status.setJenisStatus("Menunggu Verifikasi");
+            PesananModel newPesanan = pesananDb.findByIdPesanan(id);
+            newPesanan.setBuktiBayar(pesanan.getBuktiBayar());
+            newPesanan.setMetodePembayaran(pesanan.getMetodePembayaran());
 
-            pesananDb.save(pesanan);
-
+            PesananModel savedPesanan = pesananDb.save(newPesanan);
+            pesananDb.save(savedPesanan);
+            response.setStatus(200);
+            response.setMessage("success");
             response.setResult(pesanan);
 
         } catch (Exception e) {
