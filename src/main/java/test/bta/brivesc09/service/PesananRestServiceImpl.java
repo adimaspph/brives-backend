@@ -24,6 +24,11 @@ public class PesananRestServiceImpl implements PesananRestService {
         return pesananDb.save(pesanan);
     }
 
+    @Override
+    public PesananModel getPesananById(Long id) {
+        return pesananDb.getById(id);
+    }
+
 //    @Override
 //    public MapelModel createMapel(MapelModel mapel) {
 //        return mapelDb.save(mapel);
