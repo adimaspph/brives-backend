@@ -35,7 +35,11 @@ public class PesananModel implements Serializable {
     @Column(nullable = false)
     private String materi;
 
+    @Column(nullable = true)
     private String alasan;
+
+    @Column(nullable = true)
+    private String metodePembayaran;
 
     @NotNull
     @Column(nullable = false)
