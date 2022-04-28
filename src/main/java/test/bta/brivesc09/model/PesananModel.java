@@ -19,10 +19,12 @@ import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter @Getter
+@Setter
+@Getter
 @Entity
 @Table(name = "pesanan")
-//@JsonIgnoreProperties(value={"siswa"},allowSetters = true) kalau di uncomment jd infinite loop
+// @JsonIgnoreProperties(value={"siswa"},allowSetters = true) kalau di uncomment
+// jd infinite loop
 public class PesananModel implements Serializable {
 
     @Id
@@ -32,6 +34,8 @@ public class PesananModel implements Serializable {
     @NotNull
     @Column(nullable = false)
     private String materi;
+
+    private String alasan;
 
     @NotNull
     @Column(nullable = false)
@@ -46,18 +50,18 @@ public class PesananModel implements Serializable {
     @Column(nullable = true)
     private String buktiBayar;
 
-    //Jadwal
+    // Jadwal
     @ManyToOne
-    @JoinColumn(name="id_jadwal", nullable=false)
+    @JoinColumn(name = "id_jadwal", nullable = false)
     private JadwalModel jadwal;
 
-    //Siswa
+    // Siswa
     @ManyToOne
-    @JoinColumn(name="id_siswa", nullable=false)
+    @JoinColumn(name = "id_siswa", nullable = false)
     private SiswaModel siswa;
 
-    //Status
+    // Status
     @ManyToOne
-    @JoinColumn(name="id_status", nullable=false)
+    @JoinColumn(name = "id_status", nullable = false)
     private StatusPesananModel status;
 }
