@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import test.bta.brivesc09.model.JadwalModel;
+import test.bta.brivesc09.model.PesananModel;
 import test.bta.brivesc09.model.StaffModel;
 import test.bta.brivesc09.repository.JadwalDb;
 
@@ -80,6 +81,25 @@ public class JadwalRestServiceImpl implements JadwalRestService{
 
     @Override
     public List<JadwalModel> getAllJadwalByIdMapel(Long idMapel, LocalDate tanggal) {
-        return jadwalDb.findByTanggalAndMapel(tanggal, mapelRestService.getMapelById(idMapel));
+        List<JadwalModel> result = new ArrayList<>();
+        for (JadwalModel jadwal: jadwalDb.findByTanggalAndMapel(tanggal, mapelRestService.getMapelById(idMapel))) {
+            if (jadwal.getListPesanan().isEmpty()) {
+                result.add(jadwal);
+            } else {
+                boolean booked = false;
+                for (PesananModel pesanan : jadwal.getListPesanan()) {
+                    Long status = pesanan.getStatus().getIdStatusPesanan();
+                    if (status != 7) {
+                        if (status != 4) {
+                            booked = true;
+                        }
+                    }
+                }
+                if (!booked) {
+                    result.add(jadwal);
+                }
+            }
+        }
+        return result;
     }
 }
