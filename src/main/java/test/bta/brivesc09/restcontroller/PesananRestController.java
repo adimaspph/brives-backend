@@ -207,7 +207,7 @@ public class PesananRestController {
         }
     }
 
-    @PostMapping("/bayar/{id}")
+    @PutMapping("/bayar/{id}")
     public BaseResponse<PesananModel> addPembayaran(@PathVariable Long id, @RequestParam PesananModel pesanan) {
         BaseResponse<PesananModel> response = new BaseResponse<>();
         try {
