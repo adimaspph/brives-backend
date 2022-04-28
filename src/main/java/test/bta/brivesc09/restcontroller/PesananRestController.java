@@ -208,7 +208,7 @@ public class PesananRestController {
     }
 
     @PutMapping("/bayar/{id}")
-    public BaseResponse<PesananModel> addPembayaran(@PathVariable Long id, @RequestParam PesananModel pesanan) {
+    public BaseResponse<PesananModel> addPembayaran(@Valid @PathVariable Long id, @RequestBody PesananModel pesanan) {
         BaseResponse<PesananModel> response = new BaseResponse<>();
         try {
             PesananModel newPesanan = pesananDb.findByIdPesanan(id);
@@ -219,7 +219,7 @@ public class PesananRestController {
             pesananDb.save(savedPesanan);
             response.setStatus(200);
             response.setMessage("success");
-            response.setResult(pesanan);
+            response.setResult(savedPesanan);
 
         } catch (Exception e) {
             throw new ResponseStatusException(
