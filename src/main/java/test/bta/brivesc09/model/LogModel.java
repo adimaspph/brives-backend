@@ -30,7 +30,7 @@ public class LogModel implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private String statusKehadiran;
+    private Boolean statusKehadiran;
 
     //Jadwal
     @OneToOne(mappedBy="log")
