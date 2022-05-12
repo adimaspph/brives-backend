@@ -31,7 +31,6 @@ public class LogModel implements Serializable {
     @NotNull
     @Column(nullable = false)
     private String statusKehadiran;
-    
 
     //Jadwal
     @OneToOne(mappedBy="log")
