@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import test.bta.brivesc09.model.*;
 import test.bta.brivesc09.repository.JadwalDb;
+import test.bta.brivesc09.repository.LogDb;
 import test.bta.brivesc09.repository.MapelDb;
 import test.bta.brivesc09.repository.UserDb;
 import test.bta.brivesc09.rest.BaseResponse;
@@ -43,7 +44,13 @@ public class JadwalRestController {
     private UserRestService userRestService;
 
     @Autowired
+    private LogRestController logRestController;
+
+    @Autowired
     private JadwalDb jadwalDb;
+
+    @Autowired
+    private LogDb logDb;
 
     @GetMapping()
     public BaseResponse<List<JadwalModel>> getAllJadwalByTanggal(
@@ -162,6 +169,16 @@ public class JadwalRestController {
                 JadwalModel newJadwal = jadwalDb.findByIdJadwal(id);
                 newJadwal.setLinkZoom(jadwal.getLinkZoom());
                 JadwalModel savedJadwal = jadwalDb.save(newJadwal);
+
+
+                System.out.println(newJadwal.getIdJadwal());
+                LogModel newLog = new LogModel();
+                newLog.setJadwal(newJadwal);
+                newLog.setCatatan("hi");
+                newLog.setStaff(jadwal.getStaff());
+                newLog.setStatusKehadiran("Dibuat");
+                logDb.save(newLog);
+
                 response.setStatus(200);
                 response.setMessage("success");
                 response.setResult(savedJadwal);
