@@ -43,7 +43,7 @@ deploy-digitalocean:
     - ssh-add ~/.ssh/id_rsa
     - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
 
-    - scp -o StrictHostKeyChecking=no -r ./target root@$DIGITALOCEAN_IP:/deploy
+    - scp -o StrictHostKeyChecking=no -r ./target root@$DIGITALOCEAN_IP:/be-docker
 #    - scp -i $DIGITALOCEAN_PRIVATE_KEY target/*.jar root@157.245.63.146:/deploy
   only:
     - adimas
