@@ -73,14 +73,20 @@ public class LogRestController {
         return response;
     }
 
-    @GetMapping("/status/{statusKehadiran}")
-    public BaseResponse<List<LogModel>> getLogByStatusKehadiran(@PathVariable String statusKehadiran) {
+    @GetMapping("/pengajar/{idStaff}/status/{statusKehadiran}")
+    public BaseResponse<List<LogModel>> getLogSatuPengajarByStatusKehadiran(@PathVariable Long idStaff, @PathVariable String statusKehadiran) {
         BaseResponse<List<LogModel>> response = new BaseResponse<>();
         try {
-            List<LogModel> data = logDb.findByStatusKehadiran(statusKehadiran);
+            List<LogModel> datalog = logDb.findByStaff_IdStaff(idStaff);
+            ArrayList<LogModel> log = new ArrayList<LogModel>();
+            for (LogModel x : datalog) {
+                if (x.getStatusKehadiran().equals(statusKehadiran)) {
+                    log.add(x);
+                }
+            }
             response.setStatus(200);
             response.setMessage("success");
-            response.setResult(data);
+            response.setResult(log);
         } catch (Exception e) {
             response.setStatus(400);
             response.setMessage(e.toString());
