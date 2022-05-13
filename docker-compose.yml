@@ -1,0 +1,45 @@
+version: "3.7"
+
+services:
+  mysql:
+    container_name: mysql
+    image: mysql:5.7.22
+    ports:
+      - 3307:3306
+    networks:
+      - brives_network
+    volumes:
+      - brives_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: bepropen
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+  brives-docker:
+    container_name: brives-docker
+    image: brives-docker:2.0
+#    build:
+#      context: "./"
+#      dockerfile: "Dockerfile"
+    ports:
+      - 8080:8080
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bepropen?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "root"
+#      JDBC_DATABASE_URL: jdbc:mysql://mysql:3306/bepropen?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
+#      JDBC_DATABASE_USERNAME: "root"
+#      JDBC_DATABASE_PASSWORD: "root"
+    networks:
+      - brives_network
+
+networks:
+  brives_network:
+    name: brives_network
+
+volumes:
+  brives_data:
+    name: brives_data

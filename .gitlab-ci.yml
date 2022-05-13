@@ -1,7 +1,6 @@
 stages:
    - build
    - deploy
-   - deploy-digitalocean
 
 deploy-heroku-staging:
   stage: deploy
@@ -27,11 +26,11 @@ maven-build:
     paths:
       - target/*.jar
   only:
-    - adimas
+    - staging
 
 deploy-digitalocean:
-  stage: deploy-digitalocean
-  image: kroniak/ssh-client
+  stage: deploy
+  image: docker:latest
   before_script:
     - echo "deploying app"
   script:
@@ -43,7 +42,12 @@ deploy-digitalocean:
     - ssh-add ~/.ssh/id_rsa
     - ssh-keyscan -H 'gitlab.com' >> ~/.ssh/known_hosts
 
-    - scp -o StrictHostKeyChecking=no -r ./target root@$DIGITALOCEAN_IP:/deploy
+    - ssh -o StrictHostKeyChecking=no root@$DIGITALOCEAN_IP "cd be-docker && docker-compose down"
+    - ssh -o StrictHostKeyChecking=no root@$DIGITALOCEAN_IP "docker image rm brives-docker:2.0"
+#    - ssh -o StrictHostKeyChecking=no root@$DIGITALOCEAN_IP "rm be-docker/brivesc09-0.0.1-SNAPSHOT.jar"
+    - scp -o StrictHostKeyChecking=no -r ./target root@$DIGITALOCEAN_IP:/be-docker
 #    - scp -i $DIGITALOCEAN_PRIVATE_KEY target/*.jar root@157.245.63.146:/deploy
+    - ssh -o StrictHostKeyChecking=no root@$DIGITALOCEAN_IP "docker build --tag brives-docker:2.0 ./be-docker"
+    - ssh -o StrictHostKeyChecking=no root@$DIGITALOCEAN_IP "cd be-docker && docker-compose up -d"
   only:
-    - adimas
+    - staging
