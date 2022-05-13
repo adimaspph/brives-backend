@@ -57,6 +57,53 @@ public class LogRestController {
         return response;
     }
 
+    @GetMapping("/pengajar/{id}")
+    public BaseResponse<List<LogModel>> getLogByIdStaff(@PathVariable Long id) {
+        BaseResponse<List<LogModel>> response = new BaseResponse<>();
+        try {
+            List<LogModel> data = logDb.findByStaff_IdStaff(id);
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(data);
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
+
+    @GetMapping("/status/{statusKehadiran}")
+    public BaseResponse<List<LogModel>> getLogByStatusKehadiran(@PathVariable String statusKehadiran) {
+        BaseResponse<List<LogModel>> response = new BaseResponse<>();
+        try {
+            List<LogModel> data = logDb.findByStatusKehadiran(statusKehadiran);
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(data);
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
+
+    @GetMapping("/detail/{id}")
+    public BaseResponse<LogModel> getLogById(@PathVariable Long id) {
+        BaseResponse<LogModel> response = new BaseResponse<>();
+        try {
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(logDb.findByIdLog(id));
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
+
     @RequestMapping("/")
     public BaseResponse<LogModel> createLog(@Valid @RequestBody LogModel log, BindingResult bindingResult)
             throws ParseException {
