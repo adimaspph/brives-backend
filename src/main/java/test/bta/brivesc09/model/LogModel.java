@@ -30,10 +30,11 @@ public class LogModel implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private Boolean statusKehadiran;
+    private String statusKehadiran;
 
     //Jadwal
-    @OneToOne(mappedBy="log")
+    @OneToOne
+    @JoinColumn(name = "id_jadwal", referencedColumnName = "idJadwal")
     private JadwalModel jadwal;
 
     //Staff

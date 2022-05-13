@@ -168,7 +168,7 @@ public class PesananRestController {
             response.setMessage(e.toString());
             response.setResult(null);
         }
-        
+
         return response;
     }
 
@@ -206,18 +206,19 @@ public class PesananRestController {
         }
     }
 
-    @PostMapping("/bayar/{id}")
-    public BaseResponse<PesananModel> addPembayaran(@PathVariable Long id, @RequestParam String bukti) {
+    @PutMapping("/bayar/{id}")
+    public BaseResponse<PesananModel> addPembayaran(@Valid @PathVariable Long id, @RequestBody PesananModel pesanan) {
         BaseResponse<PesananModel> response = new BaseResponse<>();
         try {
-            PesananModel pesanan = pesananDb.getById(id);
-            pesanan.setBuktiBayar(bukti);
-            StatusPesananModel status = pesanan.getStatus();
-            status.setJenisStatus("Menunggu verifikasi");
+            PesananModel newPesanan = pesananDb.findByIdPesanan(id);
+            newPesanan.setBuktiBayar(pesanan.getBuktiBayar());
+            newPesanan.setMetodePembayaran(pesanan.getMetodePembayaran());
 
-            pesananDb.save(pesanan);
-
-            response.setResult(pesanan);
+            PesananModel savedPesanan = pesananDb.save(newPesanan);
+            pesananDb.save(savedPesanan);
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(savedPesanan);
 
         } catch (Exception e) {
             throw new ResponseStatusException(
@@ -225,6 +226,29 @@ public class PesananRestController {
         }
         return response;
 
+    }
+
+    @PutMapping("/addAlasan/{id}")
+    public BaseResponse<PesananModel> addAlasanPenolakan(@Valid @PathVariable Long id, @RequestBody PesananModel pesanan,
+                                                 BindingResult bindingResult) throws ParseException {
+        BaseResponse<PesananModel> response = new BaseResponse<>();
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
+        } else {
+            try {
+                PesananModel newPesanan = pesananDb.findByIdPesanan(id);
+                newPesanan.setAlasan(pesanan.getAlasan());
+                PesananModel savedPesanan = pesananDb.save(newPesanan);
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(savedPesanan);
+            } catch (Exception e) {
+                response.setStatus(400);
+                response.setMessage(e.toString());
+                response.setResult(null);
+            }
+            return response;
+        }
     }
 
 }
