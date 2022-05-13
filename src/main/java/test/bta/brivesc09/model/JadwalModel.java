@@ -80,8 +80,7 @@ public class JadwalModel implements Serializable {
     private SiswaModel siswa;
 
     // Log
-    @OneToOne
-    @JoinColumn(name = "id_log", referencedColumnName = "idLog")
+    @OneToOne(mappedBy="jadwal")
     private LogModel log;
 
     // Pesanan

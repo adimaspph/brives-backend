@@ -33,7 +33,8 @@ public class LogModel implements Serializable {
     private String statusKehadiran;
 
     //Jadwal
-    @OneToOne(mappedBy="log")
+    @OneToOne
+    @JoinColumn(name = "id_jadwal", referencedColumnName = "idJadwal")
     private JadwalModel jadwal;
 
     //Staff
