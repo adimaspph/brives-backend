@@ -66,7 +66,6 @@ public class PesananRestController {
         response.setStatus(200);
         response.setMessage("success");
         response.setResult(pesananDb.findAll(Sort.by(Sort.Direction.DESC, "waktuDibuat")));
-
         return response;
     }
 
