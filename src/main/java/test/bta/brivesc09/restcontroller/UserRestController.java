@@ -322,19 +322,25 @@ public class UserRestController {
             userDb.save(user);
             staf.setNoPegawai(staff.getNoPegawai());
             staffDb.save(staf);
-            List<MapelModel> mapels = staf.getListMapel(); // jgn dari arraylist 
+            List<MapelModel> mapels = staf.getListMapel();
+            List<String> indexNama = new ArrayList<>();
 
-            for (MapelModel mapel : mapels) {
+            for (int i = 0; i < mapels.size(); i++) {
+                MapelModel mapel = mapels.get(i);
                 String namaMapelString = mapel.getNamaMapel();
                 if (!staff.getListMapel().contains(namaMapelString)) {
-                    mapels.remove(mapel);
-                    staf.setListMapel(mapels);
-                    staffDb.save(staf);
-                    List<StaffModel> paraPengajar = mapel.getListStaff();
-                    paraPengajar.remove(staf);
-                    mapel.setListStaff(paraPengajar);
-                    mapelDb.save(mapel);
+                    indexNama.add(namaMapelString);
                 }
+            }
+            for (String namaMapel : indexNama) {
+                MapelModel mapel = mapelDb.findByNamaMapel(namaMapel).get();
+                mapels.remove(mapel);
+                staf.setListMapel(mapels);
+                staffDb.save(staf);
+                List<StaffModel> paraPengajar = mapel.getListStaff();
+                paraPengajar.remove(staf);
+                mapel.setListStaff(paraPengajar);
+                mapelDb.save(mapel);
             }
 
             if (staff.getRole().equals("PENGAJAR")) {
@@ -350,12 +356,15 @@ public class UserRestController {
                         staf.setListMapel(mapels); 
                     }
                 }
-                   
+                    
             } else {
                 List<MapelModel> empty = new ArrayList<>();
                 staf.setListMapel(empty);
                 staf.setTarif(0);
             }
+            
+
+            
             staffDb.save(staf);
             response.setStatus(200);
             response.setMessage("Akun berhasil terubah");
