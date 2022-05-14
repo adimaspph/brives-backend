@@ -174,9 +174,9 @@ public class JadwalRestController {
                 System.out.println(newJadwal.getIdJadwal());
                 LogModel newLog = new LogModel();
                 newLog.setJadwal(newJadwal);
-                newLog.setCatatan("hi");
+                newLog.setCatatan("");
                 newLog.setStaff(jadwal.getStaff());
-                newLog.setStatusKehadiran("Dibuat");
+                newLog.setStatusKehadiran("KOSONG");
                 logDb.save(newLog);
 
                 response.setStatus(200);
