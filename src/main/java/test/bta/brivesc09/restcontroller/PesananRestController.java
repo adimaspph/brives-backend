@@ -26,12 +26,16 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import test.bta.brivesc09.service.UserRestService;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -249,6 +253,47 @@ public class PesananRestController {
             }
             return response;
         }
+    }
+
+    @GetMapping("/allTransaction/{year}")
+    public BaseResponse<HashMap<String, Long>> getPesananByTahun(@PathVariable String year) {
+        BaseResponse<HashMap<String, Long>> response = new BaseResponse<>();
+        HashMap<String,Long> trans = new HashMap<>();
+        trans.put("Jan", 0L);
+        trans.put("Feb", 0L);
+        trans.put("Mar", 0L);
+        trans.put("Apr", 0L);
+        trans.put("May", 0L);
+        trans.put("Jun", 0L);
+        trans.put("Jul", 0L);
+        trans.put("Aug", 0L);
+        trans.put("Sep", 0L);
+        trans.put("Oct", 0L);
+        trans.put("Nov", 0L);
+        trans.put("Des", 0L);
+        List<PesananModel> allPesanan = pesananDb.findAll();
+        try {
+            for (PesananModel pesanan : allPesanan) {
+                LocalDateTime waktuPesan = pesanan.getWaktuDibuat();
+                Date date = Timestamp.valueOf(waktuPesan);
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date);
+                String[] qu = cal.getTime().toString().split(" ");
+                if (qu[qu.length-1].equals(year)) {
+                    trans.put(qu[1], trans.get(qu[1]) + pesanan.getNominal());
+                }
+            }
+            response.setStatus(200);
+            response.setMessage("berhasil");
+            response.setResult(trans);
+
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+
+        return response;
     }
 
 }
