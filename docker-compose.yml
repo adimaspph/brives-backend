@@ -30,6 +30,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/bepropen?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: "root"
       SPRING_DATASOURCE_PASSWORD: "root"
+      DDL_TYPE: "create"
 #      JDBC_DATABASE_URL: jdbc:mysql://mysql:3306/bepropen?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
 #      JDBC_DATABASE_USERNAME: "root"
 #      JDBC_DATABASE_PASSWORD: "root"
