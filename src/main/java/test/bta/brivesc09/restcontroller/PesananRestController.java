@@ -256,36 +256,49 @@ public class PesananRestController {
     }
 
     @GetMapping("/allTransaction/{year}")
-    public BaseResponse<HashMap<String, Long>> getPesananByTahun(@PathVariable String year) {
-        BaseResponse<HashMap<String, Long>> response = new BaseResponse<>();
-        HashMap<String,Long> trans = new HashMap<>();
-        trans.put("Jan", 0L);
-        trans.put("Feb", 0L);
-        trans.put("Mar", 0L);
-        trans.put("Apr", 0L);
-        trans.put("May", 0L);
-        trans.put("Jun", 0L);
-        trans.put("Jul", 0L);
-        trans.put("Aug", 0L);
-        trans.put("Sep", 0L);
-        trans.put("Oct", 0L);
-        trans.put("Nov", 0L);
-        trans.put("Des", 0L);
-        List<PesananModel> allPesanan = pesananDb.findAll();
+    public BaseResponse<List<HashMap<String, String>>> getPesananByTahun(@PathVariable String year) {
+        BaseResponse<List<HashMap<String, String>>> response = new BaseResponse<>();
         try {
-            for (PesananModel pesanan : allPesanan) {
-                LocalDateTime waktuPesan = pesanan.getWaktuDibuat();
-                Date date = Timestamp.valueOf(waktuPesan);
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(date);
-                String[] qu = cal.getTime().toString().split(" ");
-                if (qu[qu.length-1].equals(year)) {
-                    trans.put(qu[1], trans.get(qu[1]) + pesanan.getNominal());
-                }
-            }
+            List<HashMap<String,String>> allTrans = pesananRestService.getAllTransactionPerYear(year);
             response.setStatus(200);
             response.setMessage("berhasil");
-            response.setResult(trans);
+            response.setResult(allTrans);
+
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+
+        return response;
+    }
+
+    @GetMapping("/allPrivat/{year}")
+    public BaseResponse<List<HashMap<String, String>>> getKelasPrivatByTahun(@PathVariable String year) {
+        BaseResponse<List<HashMap<String, String>>> response = new BaseResponse<>();
+        try {
+            List<HashMap<String,String>> allTrans = pesananRestService.getAllKelasPrivatPerYear(year);
+            response.setStatus(200);
+            response.setMessage("berhasil");
+            response.setResult(allTrans);
+
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+
+        return response;
+    }
+
+    @GetMapping("/allTambahan/{year}")
+    public BaseResponse<List<HashMap<String, String>>> getKelasTambahanByTahun(@PathVariable String year) {
+        BaseResponse<List<HashMap<String, String>>> response = new BaseResponse<>();
+        try {
+            List<HashMap<String,String>> allTrans = pesananRestService.getAllKelasTambahanPerYear(year);
+            response.setStatus(200);
+            response.setMessage("berhasil");
+            response.setResult(allTrans);
 
         } catch (Exception e) {
             response.setStatus(400);
