@@ -138,5 +138,30 @@ public class LogRestController {
         }
     }
 
+    @PutMapping("/updateKehadiran/{id}")
+    public BaseResponse<LogModel> updateKehadiran(@Valid @PathVariable Long id, @RequestBody LogModel log,
+                                                 BindingResult bindingResult) throws ParseException {
+        BaseResponse<LogModel> response = new BaseResponse<>();
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
+        } else {
+            try {
+                LogModel newLog = logDb.findByIdLog(id);
+                newLog.setCatatan(log.getCatatan());
+                newLog.setStatusKehadiran(log.getStatusKehadiran());
+                LogModel savedLog = logDb.save(newLog);
+
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(savedLog);
+            } catch (Exception e) {
+                response.setStatus(400);
+                response.setMessage(e.toString());
+                response.setResult(null);
+            }
+            return response;
+        }
+    }
+
 
 }
