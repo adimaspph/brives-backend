@@ -25,6 +25,7 @@ maven-build:
   artifacts:
     paths:
       - target/*.jar
+    expire_in: 120 seconds
   only:
     - staging
 
