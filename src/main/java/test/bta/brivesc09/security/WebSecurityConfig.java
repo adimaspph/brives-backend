@@ -50,6 +50,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "https://brives-staging.herokuapp.com",
             "http://dev.bta8jakarta.com",
             "http://157.245.63.146",
+            "https://157.245.63.146",
             "https://dev.bta8jakarta.com"));
     corsConfiguration.setAllowedHeaders(Arrays.asList("*"));
     corsConfiguration.addAllowedMethod(HttpMethod.DELETE);

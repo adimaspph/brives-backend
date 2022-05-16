@@ -18,6 +18,20 @@ public class Brivesc09Application extends SpringBootServletInitializer {
 //				.web(WebApplicationType.SERVLET)
 //				.run(args);
 		SpringApplication.run(Brivesc09Application.class, args);
+
+
+	}
+
+	static void addAdmin() {
+
+	}
+
+	static void addJenjang() {
+
+	}
+
+	static void addRole() {
+
 	}
 
 	@Bean
