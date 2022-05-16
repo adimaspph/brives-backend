@@ -2,21 +2,21 @@ stages:
    - build
    - deploy
 
-deploy-heroku-staging:
-  stage: deploy
-  image: ruby:latest
-  before_script:
-    - gem install dpl --version 1.10.15
-    - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
-  script:
-    - dpl --provider=heroku --app=$HEROKU_APP_NAME_STAGING --api-key=$HEROKU_API_KEY_STAGING
-    - export HEROKU_API_KEY=$HEROKU_API_KEY_STAGING
-    - heroku run --app $HEROKU_APP_NAME_STAGING migrate
-  environment:
-    name: staging
-    url: $HEROKU_APP_HOST_STAGING
-  only:
-    - staging
+#deploy-heroku-staging:
+#  stage: deploy
+#  image: ruby:latest
+#  before_script:
+#    - gem install dpl --version 1.10.15
+#    - wget -qO- https://cli-assets.heroku.com/install-ubuntu.sh | sh
+#  script:
+#    - dpl --provider=heroku --app=$HEROKU_APP_NAME_STAGING --api-key=$HEROKU_API_KEY_STAGING
+#    - export HEROKU_API_KEY=$HEROKU_API_KEY_STAGING
+#    - heroku run --app $HEROKU_APP_NAME_STAGING migrate
+#  environment:
+#    name: staging
+#    url: $HEROKU_APP_HOST_STAGING
+#  only:
+#    - staging
 
 maven-build:
   image: maven:latest
