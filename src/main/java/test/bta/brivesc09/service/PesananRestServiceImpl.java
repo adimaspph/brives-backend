@@ -3,6 +3,7 @@ package test.bta.brivesc09.service;
 import test.bta.brivesc09.model.JadwalModel;
 import test.bta.brivesc09.model.MapelModel;
 import test.bta.brivesc09.model.PesananModel;
+import test.bta.brivesc09.repository.JadwalDb;
 import test.bta.brivesc09.repository.MapelDb;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,9 @@ import java.util.Optional;
 public class PesananRestServiceImpl implements PesananRestService {
     @Autowired
     private PesananDb pesananDb;
+
+    @Autowired
+    private JadwalDb jadwalDb;
 
     @Override
     public PesananModel createPesanan(PesananModel pesanan) {
@@ -163,6 +167,9 @@ public class PesananRestServiceImpl implements PesananRestService {
 
         List<PesananModel> allPesanan = pesananDb.findAll();
         for (PesananModel pesanan : allPesanan) {
+            if (!pesanan.getJadwal().getJenisKelas().toString().equals("PRIVATE")) {
+                continue;
+            }
             LocalDateTime waktuPesan = pesanan.getWaktuDibuat();
             Date date = Timestamp.valueOf(waktuPesan);
             Calendar cal = Calendar.getInstance();
@@ -236,11 +243,15 @@ public class PesananRestServiceImpl implements PesananRestService {
 
         List<PesananModel> allPesanan = pesananDb.findAll();
         for (PesananModel pesanan : allPesanan) {
+            if (!pesanan.getJadwal().getJenisKelas().toString().equals("TAMBAHAN")) {
+                continue;
+            }
             LocalDateTime waktuPesan = pesanan.getWaktuDibuat();
             Date date = Timestamp.valueOf(waktuPesan);
             Calendar cal = Calendar.getInstance();
             cal.setTime(date);
             String[] qu = cal.getTime().toString().split(" ");
+            
             if (qu[qu.length-1].equals(year)) {
                 for (HashMap<String,String> trans : allTrans) {
                     if (trans.get("name").equals(qu[1])) {
