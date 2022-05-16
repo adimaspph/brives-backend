@@ -34,6 +34,10 @@ public class SiswaModel implements Serializable {
     @Column(name="asal_sekolah")
     private String asalSekolah;
     
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_jenjang", referencedColumnName = "idJenjang", nullable = false)
+    private JenjangModel jenjang;
+
     @OneToOne(mappedBy = "siswa")
     private UserModel user;
 
@@ -44,4 +48,6 @@ public class SiswaModel implements Serializable {
     //Pesanan
     @OneToMany(mappedBy="siswa")
     private List<PesananModel> listPesanan;
+
+    
 }

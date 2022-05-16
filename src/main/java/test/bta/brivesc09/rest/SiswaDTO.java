@@ -3,6 +3,7 @@ package test.bta.brivesc09.rest;
 
 public class SiswaDTO {
     public String username;
+    public String jenjang;
     public String namaLengkap;
     public String email;
     public String password;
@@ -12,6 +13,10 @@ public class SiswaDTO {
 
     public String getUsername() {
         return this.username;
+    }
+
+    public String getJenjang() {
+        return this.jenjang;
     }
 
     public String getNamaLengkap() {

@@ -23,7 +23,7 @@ import java.util.List;
 @Entity
 @Getter
 @Table(name = "jenjang")
-@JsonIgnoreProperties(value={"listMapel"},allowSetters = true)
+@JsonIgnoreProperties(value={"listMapel","listSiswa"},allowSetters = true)
 // @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "idJenjang")
 public class JenjangModel implements Serializable {
     @Id
@@ -37,6 +37,9 @@ public class JenjangModel implements Serializable {
 
     @ManyToMany(mappedBy = "listJenjang")
     private List<MapelModel> listMapel;
+
+    @OneToMany(mappedBy = "jenjang", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<SiswaModel> listSiswa;
 
     public Long getIdJenjang() {
         return idJenjang;
@@ -60,5 +63,13 @@ public class JenjangModel implements Serializable {
 
     public void setListMapel(List<MapelModel> listMapel) {
         this.listMapel = listMapel;
+    }
+
+    public List<SiswaModel> getListSiswa() {
+        return listSiswa;
+    }
+
+    public void setListSiswa(List<SiswaModel> listSiswa) {
+        this.listSiswa = listSiswa;
     }
 }

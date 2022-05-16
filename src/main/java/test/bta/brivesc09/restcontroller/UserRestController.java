@@ -5,6 +5,7 @@ import test.bta.brivesc09.repository.StaffDb;
 import test.bta.brivesc09.rest.BaseResponse;
 import test.bta.brivesc09.rest.SiswaDTO;
 import test.bta.brivesc09.rest.StaffDTO;
+import test.bta.brivesc09.repository.JenjangDb;
 import test.bta.brivesc09.repository.MapelDb;
 import test.bta.brivesc09.repository.RoleDb;
 import test.bta.brivesc09.repository.SiswaDb;
@@ -63,6 +64,9 @@ public class UserRestController {
 
     @Autowired
     private MapelDb mapelDb;
+
+    @Autowired
+    private JenjangDb jenjangDb;
 
 
     @PostMapping("/create")
@@ -249,8 +253,11 @@ public class UserRestController {
                 }
                 SiswaModel newSiswa = new SiswaModel();
                 newSiswa.setAsalSekolah(siswa.getAsalSekolah());
+                JenjangModel jenjang = jenjangDb.findByNamaJenjang(siswa.getJenjang());
+                newSiswa.setJenjang(jenjang);
                 newSiswa = siswaRestService.createSiswa(newSiswa);
                 UserModel newUser = new UserModel();
+                
 
                 Long uuid = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
                 newUser.setIdUser(uuid);
@@ -295,7 +302,18 @@ public class UserRestController {
             user.setNoHP(siswa.getNoHP());
             userDb.save(user);
             pelajar.setAsalSekolah(siswa.getAsalSekolah());
+
+            if (!(siswa.getJenjang().equals(pelajar.getJenjang().getNamaJenjang()))) {
+                JenjangModel jenjangSiswa = pelajar.getJenjang();
+                List<SiswaModel> allSiswaInJenjang = jenjangSiswa.getListSiswa();
+                allSiswaInJenjang.remove(pelajar);
+                jenjangDb.save(jenjangSiswa);
+                
+                JenjangModel jenjang = jenjangDb.findByNamaJenjang(siswa.getJenjang());
+                pelajar.setJenjang(jenjang);
+            }
             siswaDb.save(pelajar);
+
             response.setStatus(200);
             response.setMessage("Akun berhasil terubah");
             response.setResult(user);
