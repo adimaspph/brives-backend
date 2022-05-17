@@ -309,4 +309,29 @@ public class PesananRestController {
         return response;
     }
 
+    @GetMapping("/jadwal/{idJadwal}/status/{idStatus}")
+    public BaseResponse<List<PesananModel>> getJadwalStatusUnique(@PathVariable Long idJadwal, @PathVariable Long idStatus) {
+        BaseResponse<List<PesananModel>> response = new BaseResponse<>();
+        try {
+            List<PesananModel> datasiswa = pesananDb.findByJadwal_IdJadwal_AndStatus_IdStatusPesanan(idJadwal, idStatus);
+            ArrayList<PesananModel> pesanan = new ArrayList<PesananModel>();
+            for (PesananModel x : datasiswa) {
+                if (x.getStatus().getIdStatusPesanan().equals(idStatus)) {
+                    pesanan.add(x);
+                }
+            }
+            response.setStatus(200);
+            response.setMessage("success");
+            response.setResult(pesanan);
+
+
+        } catch (Exception e) {
+            response.setStatus(400);
+            response.setMessage(e.toString());
+            response.setResult(null);
+        }
+
+        return response;
+    }
+
 }

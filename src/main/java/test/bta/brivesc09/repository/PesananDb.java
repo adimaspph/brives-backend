@@ -18,5 +18,6 @@ public interface PesananDb extends JpaRepository<PesananModel, Long>{
 
     List<PesananModel> findByStatus_IdStatusPesanan(Long idStatusPesanan);
     List<PesananModel> findBySiswa_IdSiswa(Long idSiswa);
+    List<PesananModel> findByJadwal_IdJadwal_AndStatus_IdStatusPesanan(Long idJadwal, Long idStatusPesanan);
 
 }
