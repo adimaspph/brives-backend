@@ -5,11 +5,9 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.data.domain.Sort;
 import test.bta.brivesc09.model.*;
+import test.bta.brivesc09.repository.JadwalDb;
 import test.bta.brivesc09.repository.StatusPesananDb;
-import test.bta.brivesc09.rest.BaseResponse;
-import test.bta.brivesc09.rest.JadwalRest;
-import test.bta.brivesc09.rest.PesananRest;
-import test.bta.brivesc09.rest.StaffDTO;
+import test.bta.brivesc09.rest.*;
 import test.bta.brivesc09.service.JadwalRestService;
 import test.bta.brivesc09.service.PesananRestService;
 import test.bta.brivesc09.service.PesananRestServiceImpl;
@@ -50,7 +48,7 @@ public class PesananRestController {
     private PesananDb pesananDb;
 
     @Autowired
-    private UserDb userDb;
+    private JadwalDb jadwalDb;
 
     @Autowired
     private StatusPesananDb statusPesananDb;
@@ -103,6 +101,11 @@ public class PesananRestController {
             try {
                 PesananModel newPesanan = pesananDb.findByIdPesanan(id);
                 newPesanan.setStatus(status);
+                if (status.getJenisStatus().equals("Terverifikasi")) {
+                    JadwalModel jadwal = newPesanan.getJadwal();
+                    jadwal.setSiswa(newPesanan.getSiswa());
+                    jadwalDb.save(jadwal);
+                }
                 PesananModel savedJadwal = pesananDb.save(newPesanan);
                 response.setStatus(200);
                 response.setMessage("success");
@@ -178,7 +181,7 @@ public class PesananRestController {
 
 
     @PostMapping()
-    public BaseResponse<PesananModel> createJadwal(
+    public BaseResponse<PesananModel> createPesanan(
             HttpServletRequest request,
             @Valid @RequestBody PesananRest pesananRest,
             BindingResult bindingResult) {
@@ -196,7 +199,8 @@ public class PesananRestController {
                 pesanan.setNominal(pesananRest.nominal);
                 pesanan.setMateri(pesananRest.materi);
                 pesanan.setWaktuDibuat(LocalDateTime.now());
-                pesanan.setJadwal(jadwalRestService.getJadwalById(pesananRest.idJadwal));
+                JadwalModel jadwal = jadwalRestService.getJadwalById(pesananRest.idJadwal);
+                pesanan.setJadwal(jadwal);
                 pesanan.setSiswa(authUser.getSiswa());
 
                 pesananRestService.createPesanan(pesanan);

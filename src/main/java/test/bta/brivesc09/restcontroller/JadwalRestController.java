@@ -1,7 +1,6 @@
 package test.bta.brivesc09.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -9,9 +8,8 @@ import org.springframework.web.server.ResponseStatusException;
 import test.bta.brivesc09.model.*;
 import test.bta.brivesc09.repository.JadwalDb;
 import test.bta.brivesc09.repository.LogDb;
-import test.bta.brivesc09.repository.MapelDb;
-import test.bta.brivesc09.repository.UserDb;
 import test.bta.brivesc09.rest.BaseResponse;
+import test.bta.brivesc09.rest.JadwalResponse;
 import test.bta.brivesc09.rest.JadwalRest;
 import test.bta.brivesc09.rest.PesanJadwalModelRest;
 import test.bta.brivesc09.service.JadwalRestService;
@@ -52,26 +50,41 @@ public class JadwalRestController {
     @Autowired
     private LogDb logDb;
 
-    @GetMapping()
-    public BaseResponse<List<JadwalModel>> getAllJadwalByTanggal(
-            HttpServletRequest request,
+    @GetMapping("/hari/{username}")
+    public BaseResponse<List<JadwalResponse>> getAllJadwalByTanggal(
+            @PathVariable String username,
             @RequestParam Integer tanggal,
             @RequestParam Integer bulan,
             @RequestParam Integer tahun
     ) {
-        BaseResponse<List<JadwalModel>> response = new BaseResponse<>();
+        BaseResponse<List<JadwalResponse>> response = new BaseResponse<>();
         if (tanggal == null || bulan == null || tahun == null) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
             );
         } else {
             try {
-                UserModel authUser = userRestService.getUserFromJwt(request);
-                response.setResult(jadwalRestService.getListJadwalByTanggal(LocalDate.of(tahun, bulan, tanggal), authUser.getStaff()));
+                UserModel authUser = userRestService.getUserByUsername(username);
+                List<JadwalResponse> result = new ArrayList<>();
+                List<JadwalModel> listJadwal = jadwalRestService.getListJadwalByTanggal(LocalDate.of(tahun, bulan, tanggal), authUser.getStaff());
 
-            } catch (NullPointerException e) {
-                throw new ResponseStatusException(
-                        HttpStatus.UNAUTHORIZED, "User not authenticated", e);
+                for (JadwalModel jadwal :
+                        listJadwal) {
+                    JadwalResponse temp = new JadwalResponse();
+                    temp.jadwal = jadwal;
+
+                    if (jadwal.getSiswa() != null) {
+                        temp.siswa = jadwal.getSiswa().getUser();
+                        temp.statusPesanan = "Terpesan";
+//                        System.out.println(jadwal.getIdJadwal());
+//                        System.out.println(jadwalRestService.getJadwalById(jadwal.getIdJadwal()));
+//                        System.out.println(jadwalRestService.getVerifiedPesanan(jadwal.getIdJadwal()));
+                        temp.materi = jadwalRestService.getVerifiedPesanan(jadwal.getIdJadwal()).getMateri();
+                    }
+                    result.add(temp);
+                }
+
+                response.setResult(result);
 
             } catch (Exception e) {
                 throw new ResponseStatusException(
@@ -84,12 +97,12 @@ public class JadwalRestController {
     // Create jadwal
     @PostMapping()
     public BaseResponse<JadwalModel> createJadwal(
-            HttpServletRequest request,
             @Valid @RequestBody JadwalRest jadwalRest,
             BindingResult bindingResult
     ) {
+        System.out.println(jadwalRest.username);
         BaseResponse<JadwalModel> response = new BaseResponse<>();
-        UserModel authUser = userRestService.getUserFromJwt(request);
+        UserModel authUser = userRestService.getUserByUsername(jadwalRest.username);
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"

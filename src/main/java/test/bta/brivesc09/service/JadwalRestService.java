@@ -1,6 +1,7 @@
 package test.bta.brivesc09.service;
 
 import test.bta.brivesc09.model.JadwalModel;
+import test.bta.brivesc09.model.PesananModel;
 import test.bta.brivesc09.model.StaffModel;
 import test.bta.brivesc09.model.UserModel;
 
@@ -14,4 +15,5 @@ public interface JadwalRestService {
     JadwalModel getJadwalById(Long idJadwal);
     Boolean deleteJadwalById(Long idJadwal);
     List<JadwalModel> getAllJadwalByIdMapel(Long idMapel, LocalDate tanggal);
+    PesananModel getVerifiedPesanan(Long idJadwal);
 }
