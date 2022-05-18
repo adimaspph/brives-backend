@@ -102,4 +102,27 @@ public class JadwalRestServiceImpl implements JadwalRestService{
         }
         return result;
     }
+
+    @Override
+    public PesananModel getVerifiedPesanan(Long idJadwal) {
+        JadwalModel jadwal = getJadwalById(idJadwal);
+        for (PesananModel pesanan :
+                jadwal.getListPesanan()) {
+            if (!pesanan.getStatus().getJenisStatus().equals("Belum Dibayar")  ) {
+                if (!pesanan.getStatus().getJenisStatus().equals("Pembayaran Ditolak"))
+                    if (!pesanan.getStatus().getJenisStatus().equals("Dibatalkan"))
+                        return pesanan;
+            }
+        }
+        return null;
+    }
+
+//    @Override
+//    public String isBooked(JadwalModel jadwal) {
+//        for (PesananModel pesanan :
+//                jadwal.getListPesanan()) {
+//            pesanan.getStatus()
+//        }
+//        return null;
+//    }
 }

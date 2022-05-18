@@ -3,6 +3,7 @@ package test.bta.brivesc09.rest;
 import test.bta.brivesc09.model.JenisKelas;
 
 public class JadwalRest {
+    public String username;
     public Integer tahun;
     public Integer bulan;
     public Integer tanggal;
