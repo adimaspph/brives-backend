@@ -83,6 +83,7 @@ public class JadwalRestServiceImpl implements JadwalRestService{
     public List<JadwalModel> getAllJadwalByIdMapel(Long idMapel, LocalDate tanggal) {
         List<JadwalModel> result = new ArrayList<>();
         for (JadwalModel jadwal: jadwalDb.findByTanggalAndMapel(tanggal, mapelRestService.getMapelById(idMapel))) {
+            if (jadwal.getJenisKelas().toString() == "TAMBAHAN") continue;
             if (jadwal.getListPesanan().isEmpty()) {
                 result.add(jadwal);
             } else {

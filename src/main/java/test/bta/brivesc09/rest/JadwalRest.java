@@ -11,4 +11,5 @@ public class JadwalRest {
     public Integer menit;
     public Long mapel;
     public JenisKelas jenisKelas;
+    public String link;
 }

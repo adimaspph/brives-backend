@@ -136,6 +136,48 @@ public class JadwalRestController {
         }
     }
 
+    @PostMapping("/kelas-tambahan")
+    public BaseResponse<JadwalModel> createKelasTambahan(
+            @Valid @RequestBody JadwalRest jadwalRest,
+            BindingResult bindingResult
+    ) {
+//        System.out.println(jadwalRest.username);
+        BaseResponse<JadwalModel> response = new BaseResponse<>();
+        UserModel authUser = userRestService.getUserByUsername(jadwalRest.username);
+        if (bindingResult.hasFieldErrors()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Request body has invalid type or missing field"
+            );
+        } else {
+            try {
+                LocalTime start = LocalTime.of(jadwalRest.jam, jadwalRest.menit);
+                JadwalModel jadwal = new JadwalModel();
+                jadwal.setTanggal(LocalDate.of(jadwalRest.tahun, jadwalRest.bulan, jadwalRest.tanggal));
+                jadwal.setWaktuMulai(start);
+
+                jadwal.setMapel(mapelRestService.getMapelById(jadwalRest.mapel));
+                jadwal.setJenisKelas(jadwalRest.jenisKelas);
+                jadwal.setStaff(authUser.getStaff());
+                jadwal.setLinkZoom(jadwalRest.link);
+
+                JadwalModel newJadwal = jadwalRestService.createJadwal(jadwal);
+
+                response.setStatus(200);
+                response.setMessage("success");
+                response.setResult(newJadwal);
+
+            } catch (UnsupportedOperationException e) {
+                throw new ResponseStatusException(
+                        HttpStatus.NOT_ACCEPTABLE, e.getMessage(), e);
+
+            } catch (Exception e) {
+                throw new ResponseStatusException(
+                        HttpStatus.BAD_REQUEST, e.getMessage());
+            }
+            return response;
+        }
+    }
+
     @DeleteMapping("/{id}")
     public BaseResponse<JadwalModel> deleteJadwalbyId(@PathVariable Long id) {
         BaseResponse<JadwalModel> response = new BaseResponse<>();
