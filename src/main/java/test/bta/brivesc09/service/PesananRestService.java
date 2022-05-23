@@ -10,7 +10,6 @@ public interface PesananRestService {
     PesananModel getPesananById(Long id);
     List<HashMap<String,String>> getAllTransactionPerYear(String year);
     List<HashMap<String,String>> getAllKelasPrivatPerYear(String year);
-    List<HashMap<String,String>> getAllKelasTambahanPerYear(String year);
 //    PesananModel deleteByIdMapel(Long idMapel);
 //    PesananModel getMapelById(Long id);
 }

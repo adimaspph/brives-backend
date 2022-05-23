@@ -9,8 +9,14 @@ import test.bta.brivesc09.model.StaffModel;
 import test.bta.brivesc09.repository.JadwalDb;
 
 import javax.transaction.Transactional;
+
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -118,12 +124,80 @@ public class JadwalRestServiceImpl implements JadwalRestService{
         return null;
     }
 
-//    @Override
-//    public String isBooked(JadwalModel jadwal) {
-//        for (PesananModel pesanan :
-//                jadwal.getListPesanan()) {
-//            pesanan.getStatus()
-//        }
-//        return null;
-//    }
+    @Override
+    public List<HashMap<String,String>> getAllKelasTambahanPerYear(String year){
+        List<HashMap<String,String>> allTrans = new ArrayList<>();
+        HashMap<String,String> jan = new HashMap<>();
+        jan.put("name", "Jan");
+        jan.put("kelasTambahan", "0");
+        allTrans.add(jan);
+        HashMap<String,String> feb = new HashMap<>();
+        feb.put("name", "Feb");
+        feb.put("kelasTambahan", "0");
+        allTrans.add(feb);
+        HashMap<String,String> mar = new HashMap<>();
+        mar.put("name", "Mar");
+        mar.put("kelasTambahan", "0");
+        allTrans.add(mar);
+        HashMap<String,String> apr = new HashMap<>();
+        apr.put("name", "Apr");
+        apr.put("kelasTambahan", "0");
+        allTrans.add(apr);
+        HashMap<String,String> may = new HashMap<>();
+        may.put("name", "May");
+        may.put("kelasTambahan", "0");
+        allTrans.add(may);
+        HashMap<String,String> jun = new HashMap<>();
+        jun.put("name", "Jun");
+        jun.put("kelasTambahan", "0");
+        allTrans.add(jun);
+        HashMap<String,String> jul = new HashMap<>();
+        jul.put("name", "Jul");
+        jul.put("kelasTambahan", "0");
+        allTrans.add(jul);
+        HashMap<String,String> aug = new HashMap<>();
+        aug.put("name", "Aug");
+        aug.put("kelasTambahan", "0");
+        allTrans.add(aug);
+        HashMap<String,String> sep = new HashMap<>();
+        sep.put("name", "Sep");
+        sep.put("kelasTambahan", "0");
+        allTrans.add(sep);
+        HashMap<String,String> oct = new HashMap<>();
+        oct.put("name", "Oct");
+        oct.put("kelasTambahan", "0");
+        allTrans.add(oct);
+        HashMap<String,String> nov = new HashMap<>();
+        nov.put("name", "Nov");
+        nov.put("kelasTambahan", "0");
+        allTrans.add(nov);
+        HashMap<String,String> des = new HashMap<>();
+        des.put("name", "Des");
+        des.put("kelasTambahan", "0");
+        allTrans.add(des);
+
+        List<JadwalModel> allJadwal = jadwalDb.findAll();
+        for (JadwalModel jadwal : allJadwal) {
+            if (!jadwal.getJenisKelas().toString().equals("TAMBAHAN")) {
+                continue;
+            }
+            LocalDateTime waktuPesan = jadwal.getTanggal().atStartOfDay();
+            Date date = Timestamp.valueOf(waktuPesan);
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(date);
+            String[] qu = cal.getTime().toString().split(" ");
+            
+            if (qu[qu.length-1].equals(year)) {
+                for (HashMap<String,String> trans : allTrans) {
+                    if (trans.get("name").equals(qu[1])) {
+                        Long x = Long.parseLong(trans.get("kelasTambahan"));
+                        x++;
+                        String totalNominal = String.valueOf(x);
+                        trans.put("kelasTambahan", totalNominal);
+                    }
+                }
+            }
+        }
+        return allTrans;
+    }
 }

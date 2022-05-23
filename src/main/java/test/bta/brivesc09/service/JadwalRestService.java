@@ -6,6 +6,7 @@ import test.bta.brivesc09.model.StaffModel;
 import test.bta.brivesc09.model.UserModel;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 
 public interface JadwalRestService {
@@ -16,4 +17,5 @@ public interface JadwalRestService {
     Boolean deleteJadwalById(Long idJadwal);
     List<JadwalModel> getAllJadwalByIdMapel(Long idMapel, LocalDate tanggal);
     PesananModel getVerifiedPesanan(Long idJadwal);
+    List<HashMap<String,String>> getAllKelasTambahanPerYear(String year);
 }
