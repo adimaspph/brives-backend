@@ -299,7 +299,7 @@ public class PesananRestController {
     public BaseResponse<List<HashMap<String, String>>> getKelasTambahanByTahun(@PathVariable String year) {
         BaseResponse<List<HashMap<String, String>>> response = new BaseResponse<>();
         try {
-            List<HashMap<String,String>> allTrans = pesananRestService.getAllKelasTambahanPerYear(year);
+            List<HashMap<String,String>> allTrans = jadwalRestService.getAllKelasTambahanPerYear(year);
             response.setStatus(200);
             response.setMessage("berhasil");
             response.setResult(allTrans);
