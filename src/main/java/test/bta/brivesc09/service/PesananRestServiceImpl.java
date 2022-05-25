@@ -32,6 +32,11 @@ public class PesananRestServiceImpl implements PesananRestService {
 
     @Override
     public PesananModel createPesanan(PesananModel pesanan) {
+        List<PesananModel> listPesanan = pesananDb.findByWaktuDibuatBetween(LocalDateTime.of(
+                pesanan.getWaktuDibuat().getYear(), pesanan.getWaktuDibuat().getMonth(), pesanan.getWaktuDibuat().getDayOfMonth(), 0, 0),
+                LocalDateTime.now());
+        pesanan.setNominal(pesanan.getNominal() + listPesanan.size());
+//        System.out.println(listPesanan.size());
         return pesananDb.save(pesanan);
     }
 
