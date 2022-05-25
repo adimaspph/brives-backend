@@ -7,6 +7,7 @@ import test.bta.brivesc09.model.PesananModel;
 import test.bta.brivesc09.model.StatusPesananModel;
 import test.bta.brivesc09.model.UserModel;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,5 +20,6 @@ public interface PesananDb extends JpaRepository<PesananModel, Long>{
     List<PesananModel> findByStatus_IdStatusPesanan(Long idStatusPesanan);
     List<PesananModel> findBySiswa_IdSiswa(Long idSiswa);
     List<PesananModel> findByJadwal_IdJadwal_AndStatus_IdStatusPesanan(Long idJadwal, Long idStatusPesanan);
+    List<PesananModel> findByWaktuDibuatBetween(LocalDateTime start, LocalDateTime end);
 
 }
