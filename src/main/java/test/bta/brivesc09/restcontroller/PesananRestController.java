@@ -20,9 +20,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import test.bta.brivesc09.service.UserRestService;
+import test.bta.brivesc09.utils.S3Util;
 
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -30,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -37,6 +40,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+
+import java.time.LocalDateTime;    
 
 @CrossOrigin()
 
@@ -92,8 +97,9 @@ public class PesananRestController {
     }
 
     @PutMapping("/status/{id}")
-    public BaseResponse<PesananModel> updateStatuspesanan(@Valid @PathVariable Long id, @RequestBody StatusPesananModel status,
-                                                          BindingResult bindingResult) throws ParseException {
+    public BaseResponse<PesananModel> updateStatuspesanan(@Valid @PathVariable Long id,
+            @RequestBody StatusPesananModel status,
+            BindingResult bindingResult) throws ParseException {
         BaseResponse<PesananModel> response = new BaseResponse<>();
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
@@ -151,7 +157,8 @@ public class PesananRestController {
     }
 
     @GetMapping("/siswa/{idSiswa}/status/{idStatus}")
-    public BaseResponse<List<PesananModel>> getPesananByStatusSiswa(@PathVariable Long idSiswa, @PathVariable Long idStatus) {
+    public BaseResponse<List<PesananModel>> getPesananByStatusSiswa(@PathVariable Long idSiswa,
+            @PathVariable Long idStatus) {
         BaseResponse<List<PesananModel>> response = new BaseResponse<>();
         try {
             List<PesananModel> datasiswa = pesananDb.findBySiswa_IdSiswa(idSiswa);
@@ -178,7 +185,6 @@ public class PesananRestController {
 
         return response;
     }
-
 
     @PostMapping()
     public BaseResponse<PesananModel> createPesanan(
@@ -215,12 +221,24 @@ public class PesananRestController {
     }
 
     @PutMapping("/bayar/{id}")
-    public BaseResponse<PesananModel> addPembayaran(@Valid @PathVariable Long id, @RequestBody PesananModel pesanan) {
+    public BaseResponse<PesananModel> addPembayaran(@Valid @PathVariable Long id,
+            @RequestParam("file") MultipartFile file, @RequestParam("metodePembayaran") String metodePembayaran) {
+        // @RequestBody PesananModel pesanan,
         BaseResponse<PesananModel> response = new BaseResponse<>();
         try {
             PesananModel newPesanan = pesananDb.findByIdPesanan(id);
-            newPesanan.setBuktiBayar(pesanan.getBuktiBayar());
-            newPesanan.setMetodePembayaran(pesanan.getMetodePembayaran());
+            String fileName = file.getOriginalFilename();
+            String namaSiswa = newPesanan.getSiswa().getUser().getNamaLengkap().replace(' ', '-');
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+            LocalDateTime now = LocalDateTime.now();  
+            
+            String savedFileName = (dtf.format(now) + "-" + namaSiswa + "-" + fileName);
+            System.out.println("savedFileName: " + savedFileName);
+
+            String url = S3Util.uploadFile(savedFileName, file);
+
+            newPesanan.setBuktiBayar(url);
+            newPesanan.setMetodePembayaran(metodePembayaran);
 
             PesananModel savedPesanan = pesananDb.save(newPesanan);
             pesananDb.save(savedPesanan);
@@ -237,8 +255,9 @@ public class PesananRestController {
     }
 
     @PutMapping("/addAlasan/{id}")
-    public BaseResponse<PesananModel> addAlasanPenolakan(@Valid @PathVariable Long id, @RequestBody PesananModel pesanan,
-                                                 BindingResult bindingResult) throws ParseException {
+    public BaseResponse<PesananModel> addAlasanPenolakan(@Valid @PathVariable Long id,
+            @RequestBody PesananModel pesanan,
+            BindingResult bindingResult) throws ParseException {
         BaseResponse<PesananModel> response = new BaseResponse<>();
         if (bindingResult.hasFieldErrors()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request Body has invalid type or missing field");
@@ -263,7 +282,7 @@ public class PesananRestController {
     public BaseResponse<List<HashMap<String, String>>> getPesananByTahun(@PathVariable String year) {
         BaseResponse<List<HashMap<String, String>>> response = new BaseResponse<>();
         try {
-            List<HashMap<String,String>> allTrans = pesananRestService.getAllTransactionPerYear(year);
+            List<HashMap<String, String>> allTrans = pesananRestService.getAllTransactionPerYear(year);
             response.setStatus(200);
             response.setMessage("berhasil");
             response.setResult(allTrans);
@@ -281,7 +300,7 @@ public class PesananRestController {
     public BaseResponse<List<HashMap<String, String>>> getKelasPrivatByTahun(@PathVariable String year) {
         BaseResponse<List<HashMap<String, String>>> response = new BaseResponse<>();
         try {
-            List<HashMap<String,String>> allTrans = pesananRestService.getAllKelasPrivatPerYear(year);
+            List<HashMap<String, String>> allTrans = pesananRestService.getAllKelasPrivatPerYear(year);
             response.setStatus(200);
             response.setMessage("berhasil");
             response.setResult(allTrans);
@@ -299,7 +318,7 @@ public class PesananRestController {
     public BaseResponse<List<HashMap<String, String>>> getKelasTambahanByTahun(@PathVariable String year) {
         BaseResponse<List<HashMap<String, String>>> response = new BaseResponse<>();
         try {
-            List<HashMap<String,String>> allTrans = jadwalRestService.getAllKelasTambahanPerYear(year);
+            List<HashMap<String, String>> allTrans = jadwalRestService.getAllKelasTambahanPerYear(year);
             response.setStatus(200);
             response.setMessage("berhasil");
             response.setResult(allTrans);
@@ -314,15 +333,15 @@ public class PesananRestController {
     }
 
     @GetMapping("/jadwal/{idJadwal}/status/{idStatus}")
-    public BaseResponse <PesananModel> getJadwalStatusUnique(@PathVariable Long idJadwal, @PathVariable Long idStatus) {
-        BaseResponse <PesananModel> response = new BaseResponse<>();
+    public BaseResponse<PesananModel> getJadwalStatusUnique(@PathVariable Long idJadwal, @PathVariable Long idStatus) {
+        BaseResponse<PesananModel> response = new BaseResponse<>();
         try {
-            List<PesananModel> datasiswa = pesananDb.findByJadwal_IdJadwal_AndStatus_IdStatusPesanan(idJadwal, idStatus);
+            List<PesananModel> datasiswa = pesananDb.findByJadwal_IdJadwal_AndStatus_IdStatusPesanan(idJadwal,
+                    idStatus);
 
             response.setStatus(200);
             response.setMessage("success");
             response.setResult(datasiswa.get(0));
-
 
         } catch (Exception e) {
             response.setStatus(400);
