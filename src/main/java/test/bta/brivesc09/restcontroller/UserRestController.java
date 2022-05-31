@@ -24,10 +24,16 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
+
+import java.io.IOException;
 import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import test.bta.brivesc09.utils.S3Util;
 
 import javax.persistence.EmbeddedId;
 import javax.servlet.http.HttpServletRequest;
@@ -422,6 +428,46 @@ public class UserRestController {
         } catch (Exception e) {
             response.setStatus(400);
             response.setMessage(e.toString());
+            response.setResult(null);
+        }
+        return response;
+    }
+
+    @PostMapping("/staff/add-image/{username}") 
+    public BaseResponse<String> addPengajarImage(@PathVariable String username, @RequestBody MultipartFile file) {
+        System.out.println("masuk");
+        BaseResponse<String> response = new BaseResponse<>();
+        UserModel user = userRestService.getUserByUsername(username);
+        StaffModel staff = user.getStaff();
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");  
+        LocalDateTime now = LocalDateTime.now();
+        String savedFileName = (dtf.format(now) + "-" + user.getUsername());
+
+        try {
+            String url = S3Util.uploadFile(savedFileName, file);
+            staff.setUrlFoto(url);
+            staffDb.save(staff);
+            userDb.save(user);
+        } catch (IOException e) {
+            staff.setUrlFoto(null);
+            staffDb.save(staff);
+            userDb.save(user);
+        }
+        
+        return response;
+    }
+
+    @GetMapping("/check/{username}")
+    public BaseResponse<String> checkUsername(@PathVariable String username) {
+        BaseResponse<String> response = new BaseResponse<>();
+        UserModel user = userRestService.getUserByUsername(username);
+        try {
+            response.setStatus(999);
+            response.setMessage("not available");
+            response.setResult(user.getUsername());
+        } catch (NullPointerException e) {
+            response.setStatus(200);
+            response.setMessage("available");
             response.setResult(null);
         }
         return response;
