@@ -45,6 +45,9 @@ public class StaffModel implements Serializable {
     @Column(name = "tarif")
     private Integer tarif;
 
+    @Column(name = "urlFoto")
+    private String urlFoto;
+
     // @JsonBackReference
     @ManyToMany(mappedBy = "listStaff")
     List<MapelModel> listMapel;
@@ -61,4 +64,5 @@ public class StaffModel implements Serializable {
     // Log
     @OneToMany(mappedBy = "staff")
     private List<LogModel> log;
+    
 }
