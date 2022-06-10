@@ -140,6 +140,8 @@ public class UserRestController {
         }
     }
 
+
+
     @GetMapping("/all")
     public BaseResponse<List<UserModel>> getAllUser() {
         BaseResponse<List<UserModel>> response = new BaseResponse<>();
@@ -150,8 +152,6 @@ public class UserRestController {
 
         return response;
     }
-
-
 
     @GetMapping("/auth")
     public BaseResponse<UserModel> getAuthenticatedUser(HttpServletRequest request) throws Exception {

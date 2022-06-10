@@ -19,9 +19,9 @@ services:
   brives-docker:
     container_name: brives-docker
     image: brives-docker:2.0
-#    build:
-#      context: "./"
-#      dockerfile: "Dockerfile"
+    build:
+      context: "./"
+      dockerfile: "Dockerfile"
     ports:
       - 8080:8080
     depends_on:
@@ -31,9 +31,6 @@ services:
       JDBC_DATABASE_USERNAME: "root"
       JDBC_DATABASE_PASSWORD: "root"
       DDL_TYPE: "update"
-#      JDBC_DATABASE_URL: jdbc:mysql://mysql:3306/bepropen?autoReconnect=true&useSSL=false&createDatabaseIfNotExist=true
-#      JDBC_DATABASE_USERNAME: "root"
-#      JDBC_DATABASE_PASSWORD: "root"
     networks:
       - brives_network
 
