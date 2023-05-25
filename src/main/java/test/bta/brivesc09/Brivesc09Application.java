@@ -25,16 +25,16 @@ public class Brivesc09Application extends SpringBootServletInitializer {
 	}
 
 	static void addAdmin() throws ParseException {
-//		UserRestController userRestController = new UserRestController();
-//		StaffDTO staffDTO = new StaffDTO();
-//		staffDTO.email = "default";
-//		staffDTO.namaLengkap = "admin default";
-//		staffDTO.noHP = "08080808";
-//		staffDTO.noPegawai = "08080808";
-//		staffDTO.username = "admin";
-//		staffDTO.password = "admin";
-//		staffDTO.role = "ADMIN";
-//		userRestController.createUserAdmin(staffDTO);
+		// UserRestController userRestController = new UserRestController();
+		// StaffDTO staffDTO = new StaffDTO();
+		// staffDTO.email = "default";
+		// staffDTO.namaLengkap = "admin default";
+		// staffDTO.noHP = "08080808";
+		// staffDTO.noPegawai = "08080808";
+		// staffDTO.username = "admin";
+		// staffDTO.password = "admin";
+		// staffDTO.role = "ADMIN";
+		// userRestController.createUserStaff(staffDTO);
 	}
 
 	static void addJenjang() {
