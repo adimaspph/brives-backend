@@ -472,6 +472,11 @@ public class UserRestController {
         }
         return response;
     }
+
+
+
+    public void createUserStaff(StaffDTO staffDTO) {
+    }
         
 }
 
